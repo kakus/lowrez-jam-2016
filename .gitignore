@@ -1,0 +1,10 @@
+bin/app.js
+node_modules
+**/*.DS_STORE
+bundle/
+bundle.zip
+.settings/
+compiler.jar
+promo/
+gh-pages
+.vscode
