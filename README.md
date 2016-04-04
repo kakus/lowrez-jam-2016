@@ -3,10 +3,10 @@
 #how to compile.
 
 you need typescript compiler.
-    npm install -g typescript
+  npm install -g typescript
     
 and then you just type
-    tsc
+  tsc
     
 your are done. open bin/index.html in your favourite browser.
 
