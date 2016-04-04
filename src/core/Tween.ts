@@ -306,6 +306,11 @@ namespace core {
 		{
 			RemoveElement(this.Tweens, tween);
 		}
+        
+        TweenPlaying(): boolean
+        {
+            return this.Tweens.some(tw => tw.IsPlaying());
+        }
 		
 		Update(timeDelta: number): void
 		{

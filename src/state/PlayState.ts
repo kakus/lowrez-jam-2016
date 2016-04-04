@@ -1,6 +1,6 @@
 /// <reference path="AbstractState.ts" />
 /// <reference path="../gfx/Text.ts" />
-/// <reference path="../gfx/TileLayer.ts" />
+/// <reference path="../game/Purgatory.ts" />
 
 
 namespace state {
@@ -19,6 +19,7 @@ namespace state {
         Score: gfx.AAText;
         
         IsKeyDown: boolean[];
+        Purgatory: game.Purgatory;
         
         /**
 		 * Called once before first update
@@ -46,21 +47,9 @@ namespace state {
                 ['tiles', 'assets/images/tiles.png']
             ).then(() => {
                 
-                let ss = new gfx.SpriteSheet('tiles', 16);
-                let tl = new gfx.TileLayer(0, 16.5, ss, [
-                    [2, 3, 4, 2],
-                    [3, 2, 2, 5],
-                    [3, 3, 2, 5]
-                ])
-                let tl2 = new gfx.TileLayer(0, 16.5, ss, [
-                    [0, 0, 0, 0],
-                    [0, 21, 1, 0],
-                    [0, 0, 0, 0]
-                ])
-                
-                this.Stage.AddChild(tl, tl2);                
-                
-            })
+                this.Purgatory = new game.Purgatory(0.5, 0.5);
+                this.Stage.AddChild(this.Purgatory);                
+            });
 
             // setup controlls
             // this thing is unused here in this demo, since I think
@@ -100,6 +89,15 @@ namespace state {
         Update(timeDelta: number): void 
         {
             super.Update(timeDelta);
+            
+            if (this.IsKeyDown[core.key.LEFT])
+                this.Purgatory.MovePlayer(game.MoveDirection.LEFT);
+            else if (this.IsKeyDown[core.key.UP])
+                this.Purgatory.MovePlayer(game.MoveDirection.UP);
+            else if (this.IsKeyDown[core.key.RIGHT])
+                this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
+                
+            if (this.Purgatory) this.Purgatory.Update(timeDelta);
         }
         
         OnResize(): void

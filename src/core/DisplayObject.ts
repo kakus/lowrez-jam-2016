@@ -2,7 +2,7 @@
 
 namespace core {
 	
-	export class DisplayObject
+	export abstract class DisplayObject
 	{
 		Position: Vector;
 		Anchor: Vector;
@@ -48,10 +48,7 @@ namespace core {
 			ctx.restore();
 		}
 		
-		protected DrawSelf(ctx: CanvasRenderingContext2D): void
-		{
-			throw new Error('Unimplemented');
-		}
+		protected abstract DrawSelf(ctx: CanvasRenderingContext2D): void;
 		
 		private DrawCache(ctx: CanvasRenderingContext2D): void
 		{

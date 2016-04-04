@@ -10,5 +10,5 @@ mgame.AddState('splash', new state.SplashScreen());
 mgame.AddState('loading', new state.LoadingState());
 mgame.AddState('menu', new state.Menu());
 mgame.AddState('play', new state.PlayState());
-mgame.Play('splash');
+mgame.Play('play');
 mgame.Start();
