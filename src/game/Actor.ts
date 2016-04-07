@@ -38,7 +38,7 @@ namespace game {
             this.Position.Set(this.Position.x | 0, this.Position.y | 0);
         }
         
-        DrawSelf(ctx: CanvasRenderingContext2D): void
+        protected DrawSelf(ctx: CanvasRenderingContext2D): void
         {
             this.Sprite.Draw(ctx);
         }
