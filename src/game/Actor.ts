@@ -10,6 +10,9 @@ namespace game {
      */
     export abstract class Actor extends core.DisplayObject
     {
+        /** this is just marker */
+        public IsActive: boolean = true;
+        
         public GridPosition = new core.Vector();
         
         public Timer = new core.TimersManager();

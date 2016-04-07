@@ -21,6 +21,8 @@ namespace state {
         IsKeyDown: boolean[];
         Purgatory: game.Purgatory;
         
+        ScreenCenter: core.Vector;
+        
         /**
 		 * Called once before first update
 		 */
@@ -34,6 +36,9 @@ namespace state {
             // only scales the game.
             // Note to self: This could be done better?
             this.DefaultSize.Set(64, 64);
+            // this.DefaultSize.Set(128, 128);
+            this.ScreenCenter = new core.Vector(64/2 - 24/2, 64/2 - 24/2);
+            
             super.Start();
             
             // setup title
@@ -44,7 +49,7 @@ namespace state {
             this.Stage.AddChild(this.Score);
             
             gfx.Sprite.Load(
-                ['tiles', 'assets/images/tiles.png']
+                ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
                 
                 this.Purgatory = new game.Purgatory(0.5, 0.5);
@@ -97,7 +102,15 @@ namespace state {
             else if (this.IsKeyDown[core.key.RIGHT])
                 this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
                 
-            if (this.Purgatory) this.Purgatory.Update(timeDelta);
+            if (this.Purgatory) {
+                this.Purgatory.Update(timeDelta);
+                
+                // let pos = this.Purgatory.ToGlobal(this.Purgatory.Player.Position);
+                // console.log(pos);
+                // core.vector.Subtract(pos, new core.Vector(10, 10), this.Purgatory.Position);
+                core.vector.Subtract(this.ScreenCenter, this.Purgatory.Player.Position, this.Purgatory.Position);
+                // this.Purgatory.Position.Set(-this.Purgatory.Player.Position.x + 20, -this.Purgatory.Player.Position.y + 20);
+            }
         }
         
         OnResize(): void

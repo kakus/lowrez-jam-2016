@@ -10,7 +10,8 @@ namespace gfx {
         constructor(
             x: number, y: number,
             public TileSet: SpriteSheet,
-            public Data: number[][]
+            public Data: number[][],
+            public CellSize = TileSet.CellSize
         ) { 
             super(x, y);
             this.BuildLayer();
@@ -26,13 +27,13 @@ namespace gfx {
                     if (id == 0) return;
                     
                     let tile = this.TileSet.GetSprite(id);
-                    tile.Position.Set(x * this.TileSet.CellSize, y * this.TileSet.CellSize);
+                    tile.Position.Set(x * this.CellSize, y * this.CellSize);
                     this.AddChild(tile);    
                 });
             });
             
             this.GridSize.Set(this.Data[0].length, this.Data.length);
-            core.vector.Scale(this.GridSize, this.TileSet.CellSize, this.Size);
+            core.vector.Scale(this.GridSize, this.CellSize, this.Size);
         }
     }
 }

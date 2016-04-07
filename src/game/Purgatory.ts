@@ -2,7 +2,8 @@
 /// <reference path="../gfx/TileLayer.ts" />
 /// <reference path="Assets.ts" />
 /// <reference path="PurgatoryData.ts" />
-/// <reference path="Hero.ts" />
+/// <reference path="actors/AHero.ts" />
+/// <reference path="actors/AFloatingTile.ts" />
 
 
 namespace game {
@@ -13,13 +14,14 @@ namespace game {
     
     export class Purgatory extends core.Layer<core.DisplayObject>
     {
-        Player: Hero;
+        Player: AHero;
         TileSet: gfx.SpriteSheet;
         
         // first layer to be rendered.
-        GroundLayer: gfx.TileLayer;
-        // layer rendered on top of ground, nothing can move.
-        StaticLayer: gfx.TileLayer;
+        GroundLayer = new core.Layer<Actor>();
+        // 2d array of references to ground tiles.
+        // first acces is row and the cols, so actor = GroundLookup[y][x]
+        GroundLookup: Actor[][] = [];
         // living object rendered on top of other layers.
         ActorLayer = new core.Layer<Actor>();
                 
@@ -27,7 +29,7 @@ namespace game {
         {
             super(x, y);
             
-            this.TileSet = new gfx.SpriteSheet('tiles', 16);
+            this.TileSet = new gfx.SpriteSheet('spritesheet', 24);
             
             this.BuildTileLayers();
             this.SpawnPlayer();
@@ -35,6 +37,10 @@ namespace game {
         
         Update(timeDelta: number): void
         {
+            for (let actor of this.GroundLayer.Children)
+            {
+                actor.Update(timeDelta);
+            }
             for (let actor of this.ActorLayer.Children)
             {
                 actor.Update(timeDelta);
@@ -57,16 +63,15 @@ namespace game {
             
             if (this.CanMoveTo(dest))
             {
+                let {x, y} = this.Player.GridPosition;
+                (this.GroundLookup[y][x] as AFloatingTile).Collapse();
+                
                 dest.Clone(this.Player.GridPosition);
                 
                 var pos = this.GridPosToLayerPos(this.Player.GridPosition);
-                
-                this.Player.Tween.New(this.Player.Position)
-                    .To({x: pos.x, y: pos.y}, 0.3, core.easing.SinusoidalInOut)
-                    .Start()
-                    .WhenDone(() => {
-                        this.SpecialAction(this.Player.GridPosition);
-                    });
+                this.Player
+                    .PlayJump(pos)
+                    .WhenDone(() => this.SpecialAction(this.Player.GridPosition));
             }
             else
             {
@@ -87,12 +92,19 @@ namespace game {
             {
                 this.Player.GridPosition.Set(2, 3);
                 this.GridPosToLayerPos(this.Player.GridPosition, this.Player.Position);
+                this.GroundLayer.Children.forEach(g => (g as AFloatingTile).Restore());
             }            
             return false;
         }
         
         private CanMoveTo(gridPos: core.Vector): boolean
         {
+            let tile = this.GroundLookup[gridPos.y][gridPos.x];
+            if (tile && tile.IsActive === false)
+            {
+                return false;
+            }
+            
             const row = game.data.layer.collision[gridPos.y]
             
             if (row)
@@ -108,17 +120,27 @@ namespace game {
         {
             this.CheckLayers();
             
-            this.GroundLayer = new gfx.TileLayer(0, 0, this.TileSet, game.data.layer.ground);
-            this.StaticLayer = new gfx.TileLayer(0, 0, this.TileSet, game.data.layer.static);
+            data.layer.ground.forEach((row, y) => {
+                this.GroundLookup.push([]);
+                
+                row.forEach((tileId, x) => {
+                  if (tileId === 0) return;
+                  let tile = new AFloatingTile(0, 0, this.TileSet);
+                  tile.GridPosition.Set(x, y);
+                  core.vector.Scale(tile.GridPosition, this.TileSet.CellSize, tile.Position);
+                  
+                  this.GroundLookup[y][x] = tile;
+                  this.GroundLayer.AddChild(tile);
+                });
+            });
             
             this.AddChild(this.GroundLayer);
-            this.AddChild(this.StaticLayer);
             this.AddChild(this.ActorLayer);
         }
         
         private SpawnPlayer(): void
         {
-            this.Player = new Hero(0, 0, this.TileSet.GetSprite(game.assets.HERO));
+            this.Player = new AHero(0, 0, this.TileSet);
             this.Player.GridPosition.Set(2, 3);
             this.GridPosToLayerPos(this.Player.GridPosition, this.Player.Position);
             this.ActorLayer.AddChild(this.Player);
