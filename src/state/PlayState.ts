@@ -36,8 +36,8 @@ namespace state {
             // native game resolution. OnResize doesn't change game resolution, it
             // only scales the game.
             // Note to self: This could be done better?
-            // this.DefaultSize.Set(64, 64);
-            this.DefaultSize.Set(128, 128);
+            this.DefaultSize.Set(64, 64);
+            // this.DefaultSize.Set(128, 128);
             this.ScreenCenter = new core.Vector(this.DefaultSize.x/2 - 24/2, this.DefaultSize.y/2 - 24/2);
             
             super.Start();

@@ -2,12 +2,16 @@
 /// <reference path="../Assets.ts" />
 /// <reference path="../Context.ts" />
 /// <reference path="../../gfx/Rectangle.ts" />
+/// <reference path="../../audio/AudioManager.ts" />
 
 
 namespace game {
     
     const COLLAPSE_TIME = 1.0;
     const DUST_TIME = 4.0;
+    
+    // audio.manager.AddSound('collapse', [3,,0.301,0.503,0.4639,0.0611,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5]); 			
+    audio.manager.AddSound('collapse', [3,,0.301,0.59,0.63,0.12,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5], 5); 			
     
     export class AFloatingTile extends Actor
     {
@@ -45,6 +49,8 @@ namespace game {
             let pos = this.Sprite.Position;
             this.IsActive = false;
             
+            audio.manager.Play("collapse", 0.5);
+            
             this.Tween.New(pos)
                 .To({y: pos.y + 15}, COLLAPSE_TIME)
                 .OnUpdate(() => pos.Set(pos.x | 0, pos.y | 0))
@@ -52,7 +58,9 @@ namespace game {
                     .To({Alpha: 0}, COLLAPSE_TIME))
                 .Parallel(null, t => t
                     .Delay(0.25)
-                    .WhenDone(() => game.context.PlayState.ShakeScreen(0.5)))
+                    .WhenDone(() => {
+                        game.context.PlayState.ShakeScreen(0.5);
+                    }))
                 .Then()
                 .To({y: pos.y}, 0.01)
                 .Start();
@@ -72,7 +80,7 @@ namespace game {
             this.DustPartices.Children.forEach(dust => {
                 
                 dust.Position.Set(24/2 + core.Random(-6, 6), 20 + core.Random(-2, 2));
-                dust.Size.Set(2, 2);
+                dust.Size.Set(1, 1);
                 
                 let dest = new core.Vector(0, 1);
                 core.vector.Rotate(dest, core.Random(-Math.PI, Math.PI));
