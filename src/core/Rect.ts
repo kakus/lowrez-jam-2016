@@ -28,9 +28,5 @@ namespace core {
             return out;
         }
         
-        Expanded(amount: core.Vector): core.Rect
-        {
-            return new Rect(this.Position.x, this.Position.y, this.Size.x + amount.x, this.Size.y + amount.y);
-        }
     }
 }
