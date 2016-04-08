@@ -18,13 +18,11 @@ namespace game {
         
         public Timer = new core.TimersManager();
         public Tween = new core.TweenManager();
-        public Animator = new gfx.Animator();
-        public Sprite: gfx.AnimatedSprite;
+        
         
         constructor(x: number, y: number, width: number, height: number)
         {
             super(x, y, width, height);
-            this.Sprite = new gfx.AnimatedSprite(0, 0, width, height, this.Animator);
             this.Timer.Delay(0, this.Start, this);
         }
         
@@ -37,9 +35,20 @@ namespace game {
         {
             this.Timer.Update(timeDelta);
             this.Tween.Update(timeDelta);
-            this.Sprite.Update(timeDelta);
             // Forbids subpixel movements
             this.Position.Set(this.Position.x | 0, this.Position.y | 0);
+        }
+    }
+    
+    export abstract class AnimatedActor extends Actor
+    {
+        public Animator = new gfx.Animator();
+        public Sprite = new gfx.AnimatedSprite(0, 0, this.Size.x, this.Size.y, this.Animator);
+        
+        Update(timeDelta: number): void
+        {
+            super.Update(timeDelta);
+            this.Sprite.Update(timeDelta);
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void

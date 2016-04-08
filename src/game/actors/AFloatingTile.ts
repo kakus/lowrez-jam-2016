@@ -13,7 +13,7 @@ namespace game {
     // audio.manager.AddSound('collapse', [3,,0.301,0.503,0.4639,0.0611,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5]); 			
     audio.manager.AddSound('collapse', [3,,0.301,0.59,0.63,0.12,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5], 5); 			
     
-    export class AFloatingTile extends Actor
+    export class AFloatingTile extends AnimatedActor
     {
         DustPartices: core.Layer<gfx.Rectangle>;
         
@@ -33,17 +33,6 @@ namespace game {
         Start(): void
         {
             
-        }
-        
-        Restore(): void
-        {
-            this.Tween.StopAll();
-            this.Animator.RestartAnimation();
-            this.Animator.Play('idle');
-            core.Assert(this.Tween.Tweens.length === 0, "" + this.Tween.Tweens.length);
-            
-            this.IsActive = true;
-            this.Sprite.Alpha = 1;
         }
         
         Collapse(): void

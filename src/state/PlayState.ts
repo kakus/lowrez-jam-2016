@@ -42,13 +42,12 @@ namespace state {
             
             super.Start();
             
+            game.context.PlayState = this;
             
             gfx.Sprite.Load(
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
-                game.context.PlayState = this;
-                this.Purgatory = new game.Purgatory(0.5, 0.5);
-                this.Stage.AddChild(this.Purgatory);                
+                this.RestartPurgatory();                
             });
 
             // setup controlls
@@ -112,6 +111,14 @@ namespace state {
         {
             super.OnResize();
             this.Game.Context['imageSmoothingEnabled'] = false;
+        }
+        
+        RestartPurgatory(): void
+        {
+            if (this.Purgatory) this.Purgatory.RemoveFromParent();
+            
+            this.Purgatory = new game.Purgatory(0.5, 0.5);
+            this.Stage.AddChild(this.Purgatory);
         }
         
         ShakeScreen(time: number, amplitude: number = 7): core.Tween

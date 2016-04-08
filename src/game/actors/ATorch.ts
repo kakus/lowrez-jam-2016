@@ -2,7 +2,7 @@
 
 namespace game {
     
-    export class ATorch extends Actor
+    export class ATorch extends AnimatedActor
     {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {

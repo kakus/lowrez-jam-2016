@@ -5,6 +5,7 @@
 /// <reference path="actors/AHero.ts" />
 /// <reference path="actors/AFloatingTile.ts" />
 /// <reference path="actors/ATorch.ts" />
+/// <reference path="actors/AText.ts" />
 /// <reference path="Context.ts" />
 
 
@@ -21,10 +22,10 @@ namespace game {
         TileSet: gfx.SpriteSheet;
         
         // first layer to be rendered.
-        GroundLayer = new core.Layer<Actor>();
+        GroundLayer = new core.Layer<AFloatingTile>();
         // 2d array of references to ground tiles.
         // first acces is row and the cols, so actor = GroundLookup[y][x]
-        GroundLookup: Actor[][] = [];
+        GroundLookup: AFloatingTile[][] = [];
         // living object rendered on top of other layers.
         ActorLayer = new core.Layer<Actor>();
                 
@@ -53,7 +54,7 @@ namespace game {
         
         MovePlayer(dir: MoveDirection): void
         {
-            if (this.Player.Tween.TweenPlaying()) return;
+            if (!this.Player.IsActive || this.Player.Tween.TweenPlaying()) return;
             
             console.log ("moving player to " + dir);
             
@@ -65,21 +66,44 @@ namespace game {
                 case MoveDirection.RIGHT: dest.x += 1; break;
             }
             
+            let futurePos = this.GridPosToLayerPos(dest);
+            
             if (this.CanMoveTo(dest))
             {
                 let {x, y} = this.Player.GridPosition;
-                (this.GroundLookup[y][x] as AFloatingTile).Collapse();
-                
+                this.GroundLookup[y][x].Collapse();
                 dest.Clone(this.Player.GridPosition);
                 
-                var pos = this.GridPosToLayerPos(this.Player.GridPosition);
                 this.Player
-                    .PlayJump(pos)
+                    .PlayJump(futurePos)
                     .WhenDone(() => this.SpecialAction(this.Player.GridPosition));
             }
             else
             {
-                console.log("can't move to " + dest);
+                this.Player.IsActive = false;
+                let {x, y} = futurePos;
+                
+                this.Player
+                    .PlayJump(futurePos)
+                    .WhenDone(() => {
+                        this.Player.PlayDead();
+                        
+                        let text = new AText(x + 64, y + 12, "YOU DIED");
+                        text.Label.SetColor('red');
+                        text.Anchor.Set(0.5, 0.5);
+                        text.Tween.New(text.Position)
+                            .To({x: x + 12}, 1, core.easing.SinusoidalInOut)
+                            .Then()
+                            .Delay(2)
+                            .Then()
+                            .To({x: -text.Size.x * 2}, 1, core.easing.SinusoidalInOut)
+                            .Start()
+                            .WhenDone(() => this.SpecialAction(new core.Vector(3, 0)))
+                            .WhenDone(() => text.RemoveFromParent());
+                            
+                        this.ActorLayer.AddChild(text);
+                    });
+                    
             }
             
         }
@@ -94,9 +118,7 @@ namespace game {
         {
             if (gridPos.x === 3 && gridPos.y === 0)
             {
-                this.Player.GridPosition.Set(2, 3);
-                this.GridPosToLayerPos(this.Player.GridPosition, this.Player.Position);
-                this.GroundLayer.Children.forEach(g => (g as AFloatingTile).Restore());
+                game.context.PlayState.RestartPurgatory();
             }            
             return false;
         }
@@ -128,7 +150,7 @@ namespace game {
                 this.GroundLookup.push([]);
                 
                 row.forEach((tileId, x) => {
-                  let tile: Actor;
+                  let tile: AFloatingTile;
                   
                   switch (tileId) {
                       case 0: return;
