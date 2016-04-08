@@ -2,17 +2,19 @@
 
 namespace game {
     
-    export enum assets 
+    export var assets = 
     {
-        HERO_FACE_UP = 1,
-        HERO_FACE_LEFT = 2,
+        HERO_FACE_UP : 1,
+        HERO_FACE_LEFT : 2,
+        HERO_FACE_RIGHT : 3,
         
-        FLOATING_TILE_TOP = 12,
-        FLOATING_TILE_BOTTOM = 22,
+        // these have difference index since, this index is counted from
+        // grid [24, 48] with offset [0,24]
+        FLOATING_TILE_FRAMES: [1, 2, 3, 4, 5],
         
-        SMALL_SHADOW = 31,
-        DUST_CLOUD_1 = 41,
-        DUST_CLOUD_2 = 42
+        SMALL_SHADOW : 31,
+        DUST_CLOUD_1 : 41,
+        DUST_CLOUD_2 : 42
     }
     
 }

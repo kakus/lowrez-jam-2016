@@ -5,34 +5,23 @@ namespace game {
     
     const JUMP_DURATION = 0.5;
         
-    enum EFace { LEFT, RIGHT, UP };
-    
     audio.manager.AddSound('landing', [0,,0.0785,,0.2923,0.7043,,-0.5667,0.0112,,,0.0145,,0.2016,,0.0033,,-0.0354,0.9802,,,0.0297,,0.5]);
     
     export class AHero extends Actor
     {
-        Face = EFace.LEFT;
-        Frames: { [face: number]: gfx.Sprite }
+        Face : 'left' | 'right' | 'up' = 'left';
         Shadow: gfx.Sprite;
         
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
-            super(x, y, sheet.GetSprite(assets.HERO_FACE_LEFT));
+            super(x, y, 24, 24);
             
-            this.Frames = {};
-            this.Frames[EFace.LEFT] = sheet.GetSprite(assets.HERO_FACE_LEFT);
-            this.Frames[EFace.RIGHT] = sheet.GetSprite(assets.HERO_FACE_LEFT);
-            this.Frames[EFace.RIGHT].Scale.x *= -1;
-            this.Frames[EFace.UP] = sheet.GetSprite(assets.HERO_FACE_UP);
-            
-            for (let key in this.Frames) {
-                let frame = this.Frames[key];
-                frame.Anchor.Set(0.5, 0.5);
-                core.vector.Scale(frame.Size, 0.5, frame.Position);
-            }
+            this.Animator.AddAnimation('left', [assets.HERO_FACE_LEFT], sheet);
+            this.Animator.AddAnimation('right', [assets.HERO_FACE_RIGHT], sheet);
+            this.Animator.AddAnimation('up', [assets.HERO_FACE_UP], sheet);
             
             this.Shadow = sheet.GetSprite(assets.SMALL_SHADOW);
-            this.UpdateSprite();
+            this.Animator.Play('left');
         }
          
         Start(): void
@@ -64,19 +53,15 @@ namespace game {
         {
             if (dest.y - this.Position.y < 0) 
             {
-                this.Face = EFace.UP;
+                this.Face = 'up';
             }
             else 
             {
-                this.Face = dest.x - this.Position.x > 0 ? EFace.RIGHT : EFace.LEFT;    
+                this.Face = dest.x - this.Position.x > 0 ?'right' : 'left';    
             }
             
-            this.UpdateSprite();
+            this.Animator.Play(this.Face);
         }
         
-        private UpdateSprite()
-        {
-            this.Sprite = this.Frames[this.Face];
-        }
     }
 }

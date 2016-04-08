@@ -15,18 +15,17 @@ namespace game {
     
     export class AFloatingTile extends Actor
     {
-        Sprite: core.Layer<gfx.Sprite>;
         DustPartices: core.Layer<gfx.Rectangle>;
         
-        constructor(x: number, y: number, sheet: gfx.SpriteSheet)
+        constructor(x: number, y: number, sheetId: string)
         {
-            super(x, y, new core.Layer(0, 0, sheet.CellSize, sheet.CellSize * 2));
-            
-            let top = sheet.GetSprite(assets.FLOATING_TILE_TOP);
-            let bottom = sheet.GetSprite(assets.FLOATING_TILE_BOTTOM);
-            bottom.Position.y += top.Size.y;
-            
-            this.Sprite.AddChild(bottom, top);
+            super(x, y,24, 48);
+            let sheet = new gfx.SpriteSheet(sheetId, new core.Vector(24, 48), new core.Vector(0, 24));
+             
+             
+            this.Animator.AddAnimation('collapse', assets.FLOATING_TILE_FRAMES, sheet);
+            this.Animator.AddAnimation('idle', [assets.FLOATING_TILE_FRAMES[0]], sheet);
+            this.Animator.Play('idle');
             
             this.SetupDustParticles(sheet);
         }
@@ -39,9 +38,12 @@ namespace game {
         Restore(): void
         {
             this.Tween.StopAll();
+            this.Animator.RestartAnimation();
+            this.Animator.Play('idle');
             core.Assert(this.Tween.Tweens.length === 0, "" + this.Tween.Tweens.length);
-            this.Sprite.Alpha = 1;
+            
             this.IsActive = true;
+            this.Sprite.Alpha = 1;
         }
         
         Collapse(): void
@@ -49,7 +51,8 @@ namespace game {
             let pos = this.Sprite.Position;
             this.IsActive = false;
             
-            audio.manager.Play("collapse", 0.5);
+            audio.manager.Play('collapse', 0.5);
+            this.Animator.Play('collapse');
             
             this.Tween.New(pos)
                 .To({y: pos.y + 15}, COLLAPSE_TIME)

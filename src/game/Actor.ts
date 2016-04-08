@@ -1,6 +1,7 @@
 /// <reference path="../core/DisplayObject.ts" />
 /// <reference path="../core/Timer.ts" />
 /// <reference path="../core/Tween.ts" />
+/// <reference path="../gfx/AnimatedSprite.ts" />
 
 
 namespace game {
@@ -17,11 +18,13 @@ namespace game {
         
         public Timer = new core.TimersManager();
         public Tween = new core.TweenManager();
+        public Animator = new gfx.Animator();
+        public Sprite: gfx.AnimatedSprite;
         
-        constructor(x: number, y: number, 
-            public Sprite: core.DisplayObject
-        ) {
-            super(x, y, Sprite.Size.x, Sprite.Size.y);
+        constructor(x: number, y: number, width: number, height: number)
+        {
+            super(x, y, width, height);
+            this.Sprite = new gfx.AnimatedSprite(0, 0, width, height, this.Animator);
             this.Timer.Delay(0, this.Start, this);
         }
         
@@ -34,6 +37,7 @@ namespace game {
         {
             this.Timer.Update(timeDelta);
             this.Tween.Update(timeDelta);
+            this.Sprite.Update(timeDelta);
             // Forbids subpixel movements
             this.Position.Set(this.Position.x | 0, this.Position.y | 0);
         }

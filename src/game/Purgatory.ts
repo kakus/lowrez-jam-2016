@@ -4,6 +4,7 @@
 /// <reference path="PurgatoryData.ts" />
 /// <reference path="actors/AHero.ts" />
 /// <reference path="actors/AFloatingTile.ts" />
+/// <reference path="actors/ATorch.ts" />
 /// <reference path="Context.ts" />
 
 
@@ -32,7 +33,7 @@ namespace game {
             super(x, y);
             game.context.Purgatory = this;
             
-            this.TileSet = new gfx.SpriteSheet('spritesheet', 24);
+            this.TileSet = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
             
             this.BuildTileLayers();
             this.SpawnPlayer();
@@ -85,7 +86,7 @@ namespace game {
         
         GridPosToLayerPos(grid: core.Vector, out = new core.Vector()): core.Vector
         {
-            core.vector.Scale(grid, this.TileSet.CellSize, out);
+            core.vector.Multiply(grid, this.TileSet.CellSize, out);
             return out;
         }
         
@@ -127,13 +128,36 @@ namespace game {
                 this.GroundLookup.push([]);
                 
                 row.forEach((tileId, x) => {
-                  if (tileId === 0) return;
-                  let tile = new AFloatingTile(0, 0, this.TileSet);
+                  let tile: Actor;
+                  
+                  switch (tileId) {
+                      case 0: return;
+                      case 1: tile = new AFloatingTile(0, 0, this.TileSet.ImageId); break;
+                      default: throw new Error('tile not mapped.')
+                  }
+                  
                   tile.GridPosition.Set(x, y);
-                  core.vector.Scale(tile.GridPosition, this.TileSet.CellSize, tile.Position);
+                  core.vector.Multiply(tile.GridPosition, this.TileSet.CellSize, tile.Position);
                   
                   this.GroundLookup[y][x] = tile;
                   this.GroundLayer.AddChild(tile);
+                });
+            });
+            
+            data.layer.actors.forEach((row, y) => {
+                row.forEach((tileId, x) => {
+                  let actor: Actor;
+                  
+                  switch (tileId) {
+                      case 0: return;
+                      case 2: actor = new ATorch(0, 0, this.TileSet); break;
+                      default: throw new Error('actor not mapped.')
+                  }
+                  
+                  actor.GridPosition.Set(x, y);
+                  core.vector.Multiply(actor.GridPosition, this.TileSet.CellSize, actor.Position);
+                  
+                  this.ActorLayer.AddChild(actor);
                 });
             });
             
