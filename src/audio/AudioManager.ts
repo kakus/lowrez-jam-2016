@@ -7,6 +7,8 @@ namespace audio {
 	class AudioManager
 	{
 		Sounds: {[key: string]: {index: number, pool: HTMLAudioElement[] }} = {};
+        
+        Volume: number = 1;
 		
 		AddSound(key: string, data: number[], poolCount = 1): void
 		{
@@ -29,14 +31,17 @@ namespace audio {
 			};
 		}
 		
-		Play(key: string)
+		Play(key: string, volume: number = 1)
 		{
-			return;
-			
 			let sound = this.Sounds[key],
 				audio = sound.pool[(sound.index++)%sound.pool.length];
 				
-			audio && audio.play();
+            if (audio)
+            {
+                console.log("playing " + key);
+                audio.volume = volume * this.Volume;
+			    audio.play();
+            }
 		}
 	}
 	
