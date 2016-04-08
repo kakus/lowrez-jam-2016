@@ -10,7 +10,9 @@ namespace game {
         FLOATING_TILE_TOP = 12,
         FLOATING_TILE_BOTTOM = 22,
         
-        SMALL_SHADOW = 31
+        SMALL_SHADOW = 31,
+        DUST_CLOUD_1 = 41,
+        DUST_CLOUD_2 = 42
     }
     
 }

@@ -4,6 +4,8 @@
 /// <reference path="PurgatoryData.ts" />
 /// <reference path="actors/AHero.ts" />
 /// <reference path="actors/AFloatingTile.ts" />
+/// <reference path="Context.ts" />
+
 
 
 namespace game {
@@ -28,6 +30,7 @@ namespace game {
         constructor(x: number, y: number)
         {
             super(x, y);
+            game.context.Purgatory = this;
             
             this.TileSet = new gfx.SpriteSheet('spritesheet', 24);
             

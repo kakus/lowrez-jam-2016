@@ -92,6 +92,8 @@ namespace core {
 		
 		To(properites: {[name:string]: number}, duration: number = 1, ease: IEasingFunction = easing.Linear): Tween
 		{
+            core.Assert(duration > 0, "Duration has be greater than 0.");
+            
 			this.TweenedProperties = [];
 			
 			for (let key in properites) {
@@ -114,7 +116,7 @@ namespace core {
 			return this;
 		}
 		
-		OnUpdate(callback: Function): Tween
+		OnUpdate(callback: (target: any, progress: number) => void): Tween
 		{
 			this.OnUpdateCallbacks.Add(callback);
 			return this;
@@ -319,6 +321,14 @@ namespace core {
 				tween.Update(timeDelta);
 			}
 		}
+        
+        StopAll(finishTween = true): void
+        {
+            for (let i = this.Tweens.length - 1; i >= 0; --i)
+            {
+                this.Tweens[i].Stop();
+            }
+        }
 	}
 	
 	

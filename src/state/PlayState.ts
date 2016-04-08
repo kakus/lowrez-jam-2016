@@ -1,6 +1,7 @@
 /// <reference path="AbstractState.ts" />
 /// <reference path="../gfx/Text.ts" />
 /// <reference path="../game/Purgatory.ts" />
+/// <reference path="../game/Context.ts" />
 
 
 namespace state {
@@ -35,9 +36,9 @@ namespace state {
             // native game resolution. OnResize doesn't change game resolution, it
             // only scales the game.
             // Note to self: This could be done better?
-            this.DefaultSize.Set(64, 64);
-            // this.DefaultSize.Set(128, 128);
-            this.ScreenCenter = new core.Vector(64/2 - 24/2, 64/2 - 24/2);
+            // this.DefaultSize.Set(64, 64);
+            this.DefaultSize.Set(128, 128);
+            this.ScreenCenter = new core.Vector(this.DefaultSize.x/2 - 24/2, this.DefaultSize.y/2 - 24/2);
             
             super.Start();
             
@@ -51,7 +52,7 @@ namespace state {
             gfx.Sprite.Load(
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
-                
+                game.context.PlayState = this;
                 this.Purgatory = new game.Purgatory(0.5, 0.5);
                 this.Stage.AddChild(this.Purgatory);                
             });
@@ -117,6 +118,23 @@ namespace state {
         {
             super.OnResize();
             this.Game.Context['imageSmoothingEnabled'] = false;
+        }
+        
+        ShakeScreen(time: number, amplitude: number = 7): core.Tween
+        {
+            return this.Tweens.New(this.Stage.Position)
+                .OnUpdate((position, progress) =>{
+                    progress = progress > 0.5 ? 2 - progress * 2 : progress * 2;
+                    position.Set(
+                        (core.Random(-amplitude, amplitude) * progress)| 0,
+                        (core.Random(-amplitude, amplitude) * progress)| 0
+                    );
+                })
+                .Delay(time)
+                .Then()
+                // restore
+                .To({x: 0, y: 0}, 0.01)
+                .Start();
         }
 
     }
