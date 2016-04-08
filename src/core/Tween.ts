@@ -34,7 +34,7 @@ namespace core {
 		Duration: number = 0;
 		Easeing: IEasingFunction;
 		
-		OnDoneCallback: (target: any) => void;
+		OnDoneCallbacks = new CallbackSet();
 		OnStart = new CallbackSet();
 		OnUpdateCallbacks = new CallbackSet();
 		IsDone = false;
@@ -112,7 +112,7 @@ namespace core {
 		
 		WhenDone(callback: (target) => void): Tween
 		{
-			this.OnDoneCallback = callback;
+            this.OnDoneCallbacks.Add(callback);
 			return this;
 		}
 		
@@ -205,8 +205,7 @@ namespace core {
 					if (!self.IsDone)
 					{
 						self.UpdateProperties(self.Duration);
-						
-						if (self.OnDoneCallback) self.OnDoneCallback(self.Target);
+						self.OnDoneCallbacks.CallAll(self.Target);
 						if (self.Manager && !self.Next) self.Manager.StopTween(self.GetRoot());
 						self.IsDone = true;
 					}
