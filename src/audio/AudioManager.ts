@@ -38,7 +38,6 @@ namespace audio {
 				
             if (audio)
             {
-                console.log("playing " + key);
                 audio.volume = volume * this.Volume;
 			    audio.play();
             }

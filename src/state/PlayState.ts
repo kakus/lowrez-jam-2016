@@ -42,12 +42,6 @@ namespace state {
             
             super.Start();
             
-            // setup title
-            this.Score = new gfx.AAText(32, 1, "SCORE 0");
-            this.Score.Anchor.Set(0.5, 0);
-            // Set height of character in pixels
-            this.Score.SetSize(5);
-            this.Stage.AddChild(this.Score);
             
             gfx.Sprite.Load(
                 ['spritesheet', 'assets/images/spritesheet.png']
