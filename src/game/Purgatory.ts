@@ -33,11 +33,10 @@ namespace game {
         {
             super(x, y);
             game.context.Purgatory = this;
-            
             this.TileSet = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
-            
             this.BuildTileLayers();
-            this.SpawnPlayer();
+            this.Size.Set(data.layer.ground[0].length, data.layer.ground.length);
+            core.vector.Scale(this.Size, 24, this.Size);
         }
         
         Update(timeDelta: number): void
@@ -81,18 +80,23 @@ namespace game {
             else
             {
                 this.Player.IsActive = false;
-                let {x, y} = futurePos;
                 
+                                
                 this.Player
                     .PlayJump(futurePos)
                     .WhenDone(() => {
                         this.Player.PlayDead();
                         
-                        let text = new AText(x + 64, y + 12, "YOU DIED");
+                        let center = new core.Vector(GAME.Canvas.width/2, GAME.Canvas.height/2);
+                        center = this.ToLocal(center);
+                        
+                        let text = new AText(0, center.y, "YOU DIED");
                         text.Label.SetColor('red');
                         text.Anchor.Set(0.5, 0.5);
+                        text.Position.x = center.x + text.Size.x * 2;
+                        
                         text.Tween.New(text.Position)
-                            .To({x: x + 12}, 1, core.easing.SinusoidalInOut)
+                            .To({x: center.x}, 1, core.easing.SinusoidalInOut)
                             .Then()
                             .Delay(2)
                             .Then()
@@ -125,6 +129,11 @@ namespace game {
         
         private CanMoveTo(gridPos: core.Vector): boolean
         {
+            if (gridPos.y < 0 || gridPos.y > this.GroundLookup.length - 1)
+            {
+                return false;
+            }
+            
             let tile = this.GroundLookup[gridPos.y][gridPos.x];
             if (tile && tile.IsActive === false)
             {
@@ -173,6 +182,7 @@ namespace game {
                   switch (tileId) {
                       case 0: return;
                       case 2: actor = new ATorch(0, 0, this.TileSet); break;
+                      case 3: actor = this.Player = new AHero(0, 0, this.TileSet); break;
                       default: throw new Error('actor not mapped.')
                   }
                   
@@ -187,19 +197,11 @@ namespace game {
             this.AddChild(this.ActorLayer);
         }
         
-        private SpawnPlayer(): void
-        {
-            this.Player = new AHero(0, 0, this.TileSet);
-            this.Player.GridPosition.Set(2, 3);
-            this.GridPosToLayerPos(this.Player.GridPosition, this.Player.Position);
-            this.ActorLayer.AddChild(this.Player);
-        }
-        
         private CheckLayers(): void
         {
             var layers = [game.data.layer.collision,
-                game.data.layer.ground,
-                game.data.layer.static];
+                game.data.layer.ground];
+                // game.data.layer.static];
                 
             core.Assert(layers.every(layer => {
                 return layer.length === game.data.layer.collision.length &&

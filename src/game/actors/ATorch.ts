@@ -9,7 +9,6 @@ namespace game {
             super(x, y, sheet.CellSize.x, sheet.CellSize.y);
             let a = this.Animator.AddAnimation('idle', assets.TORCH_FRAMES, sheet);
             a.Loop = true;
-            // a.Duration = 2;
             this.Animator.Play('idle');
         }
         
