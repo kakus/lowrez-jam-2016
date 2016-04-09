@@ -1,5 +1,6 @@
 /// <reference path="AbstractState.ts" />
 /// <reference path="../gfx/Text.ts" />
+/// <reference path="../game/MonsterFight.ts" />
 /// <reference path="../game/Purgatory.ts" />
 /// <reference path="../game/Context.ts" />
 
@@ -21,6 +22,7 @@ namespace state {
         
         IsKeyDown: boolean[];
         Purgatory: game.Purgatory;
+        MonsterFight: game.MonsterFight;
         
         ScreenCenter: core.Vector;
         
@@ -37,7 +39,6 @@ namespace state {
             // only scales the game.
             // Note to self: This could be done better?
             this.DefaultSize.Set(64, 64);
-            // this.DefaultSize.Set(128, 128);
             this.ScreenCenter = new core.Vector(this.DefaultSize.x/2 - 24/2, this.DefaultSize.y/2 - 24/2);
             
             super.Start();
@@ -53,8 +54,10 @@ namespace state {
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
                 game.context.PlayState = this;
-                this.Purgatory = new game.Purgatory(0.5, 0.5);
-                this.Stage.AddChild(this.Purgatory);                
+                this.MonsterFight = new game.MonsterFight(0.5, 0.5);
+                this.Stage.AddChild(this.MonsterFight);
+                //this.Purgatory = new game.Purgatory(0.5, 0.5);
+                //this.Stage.AddChild(this.Purgatory);
             });
 
             // setup controlls
@@ -96,14 +99,20 @@ namespace state {
         {
             super.Update(timeDelta);
             
-            if (this.IsKeyDown[core.key.LEFT])
-                this.Purgatory.MovePlayer(game.MoveDirection.LEFT);
-            else if (this.IsKeyDown[core.key.UP])
-                this.Purgatory.MovePlayer(game.MoveDirection.UP);
-            else if (this.IsKeyDown[core.key.RIGHT])
-                this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
-                
+            if (this.MonsterFight) {
+                if (this.IsKeyDown[core.key.UP])
+                    this.MonsterFight.Flap();
+                this.MonsterFight.Update(timeDelta);
+            }
+
             if (this.Purgatory) {
+                if (this.IsKeyDown[core.key.LEFT])
+                    this.Purgatory.MovePlayer(game.MoveDirection.LEFT);
+                else if (this.IsKeyDown[core.key.UP])
+                    this.Purgatory.MovePlayer(game.MoveDirection.UP);
+                else if (this.IsKeyDown[core.key.RIGHT])
+                    this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
+
                 this.Purgatory.Update(timeDelta);
                 
                 // let pos = this.Purgatory.ToGlobal(this.Purgatory.Player.Position);

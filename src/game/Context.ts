@@ -3,6 +3,7 @@ namespace game {
     class Context
     {
         Purgatory: Purgatory;
+        MonsterFight: MonsterFight;
         PlayState: state.PlayState;    
     }
     
