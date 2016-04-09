@@ -6,6 +6,7 @@
 /// <reference path="actors/AFloatingTile.ts" />
 /// <reference path="actors/ATorch.ts" />
 /// <reference path="actors/AText.ts" />
+/// <reference path="actors/ADemon.ts" />
 /// <reference path="Context.ts" />
 
 
@@ -183,6 +184,7 @@ namespace game {
                       case 0: return;
                       case 2: actor = new ATorch(0, 0, this.TileSet); break;
                       case 3: actor = this.Player = new AHero(0, 0, this.TileSet); break;
+                      case 4: actor = new ARedDemon(0, 0, this.TileSet); break;
                       default: throw new Error('actor not mapped.')
                   }
                   

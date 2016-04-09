@@ -5,6 +5,8 @@ namespace game.data {
         const _ = 1; // ground tile
         const t = 2; // torch
         const h = 3; // hero
+        
+        const r = 4; // red demon
 
         export const ground: number[][] = [
             [0, 0, 0, 0, _, 0, 0, 0, 0],
@@ -33,14 +35,14 @@ namespace game.data {
         // ];
         
         export const actors: number[][] = [
+            [0, 0, 0, t, r, t, 0, 0, 0],
             [0, 0, 0, t, 0, t, 0, 0, 0],
             [0, 0, 0, t, 0, t, 0, 0, 0],
-            [0, 0, 0, t, 0, t, 0, 0, 0],
-            [0, 0, 0, t, 0, t, 0, 0, 0],
+            [r, 0, r, t, 0, t, r, 0, r],
             [0, 0, 0, t, 0, t, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [r, 0, r, 0, 0, 0, r, 0, r],
             [0, t, 0, 0, 0, 0, 0, t, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, t, 0, 0, 0, 0],
