@@ -29,6 +29,7 @@ namespace game {
         GroundLookup: AFloatingTile[][] = [];
         // living object rendered on top of other layers.
         ActorLayer = new core.Layer<Actor>();
+        Demons: ADemon[] = [];
                 
         constructor(x: number, y: number)
         {
@@ -81,36 +82,11 @@ namespace game {
             else
             {
                 this.Player.IsActive = false;
-                
                                 
                 this.Player
                     .PlayJump(futurePos)
-                    .WhenDone(() => {
-                        this.Player.PlayDead();
-                        
-                        let center = new core.Vector(GAME.Canvas.width/2, GAME.Canvas.height/2);
-                        center = this.ToLocal(center);
-                        
-                        let text = new AText(0, center.y, "YOU DIED");
-                        text.Label.SetColor('red');
-                        text.Anchor.Set(0.5, 0.5);
-                        text.Position.x = center.x + text.Size.x * 2;
-                        
-                        text.Tween.New(text.Position)
-                            .To({x: center.x}, 1, core.easing.SinusoidalInOut)
-                            .Then()
-                            .Delay(2)
-                            .Then()
-                            .To({x: -text.Size.x * 2}, 1, core.easing.SinusoidalInOut)
-                            .Start()
-                            .WhenDone(() => this.SpecialAction(new core.Vector(3, 0)))
-                            .WhenDone(() => text.RemoveFromParent());
-                            
-                        this.ActorLayer.AddChild(text);
-                    });
-                    
+                    .WhenDone(() => this.PlayerDied());
             }
-            
         }
         
         GridPosToLayerPos(grid: core.Vector, out = new core.Vector()): core.Vector
@@ -119,12 +95,52 @@ namespace game {
             return out;
         }
         
+        private PlayerDied(): void
+        {
+            this.Player.PlayDead();
+                        
+            let center = new core.Vector(GAME.Canvas.width/2, GAME.Canvas.height/2);
+            center = this.ToLocal(center);
+            
+            let text = new AText(0, center.y, "YOU DIED");
+            text.Label.SetColor('red');
+            text.Anchor.Set(0.5, 0.5);
+            text.Position.x = center.x + text.Size.x * 2;
+            
+            text.Tween.New(text.Position)
+                .To({x: center.x}, 1, core.easing.SinusoidalInOut)
+                .Then()
+                .Delay(2)
+                .Then()
+                .To({x: -text.Size.x * 2}, 1, core.easing.SinusoidalInOut)
+                .Start()
+                .WhenDone(() => {
+                    text.RemoveFromParent();
+                    context.PlayState.RestartPurgatory();
+                });
+                
+            this.ActorLayer.AddChild(text);
+        }
+        
         private SpecialAction(gridPos: core.Vector): boolean
         {
-            if (gridPos.x === 3 && gridPos.y === 0)
+            for (let demon of this.Demons)
             {
-                game.context.PlayState.RestartPurgatory();
-            }            
+                if (demon.GridPosition.x == gridPos.x && demon.GridPosition.y == gridPos.y)
+                {
+                    this.Player.IsActive = false;
+                    
+                    context.PlayState.Timers.Delay(0.7, () => {
+                        
+                        context.PlayState.BlinkScreen(1);
+                        context.PlayState.ShakeScreen(1).WhenDone(() => {
+                            context.PlayState.RestartPurgatory();
+                        });
+                        
+                    });
+                    // this.PlayerDied();
+                }
+             }
             return false;
         }
         
@@ -184,7 +200,7 @@ namespace game {
                       case 0: return;
                       case 2: actor = new ATorch(0, 0, this.TileSet); break;
                       case 3: actor = this.Player = new AHero(0, 0, this.TileSet); break;
-                      case 4: actor = new ARedDemon(0, 0, this.TileSet); break;
+                      case 4: actor = new ARedDemon(0, 0, this.TileSet); this.Demons.push(actor as ADemon); break;
                       default: throw new Error('actor not mapped.')
                   }
                   

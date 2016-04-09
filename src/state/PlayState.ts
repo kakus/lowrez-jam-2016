@@ -47,7 +47,7 @@ namespace state {
             gfx.Sprite.Load(
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
-                this.RestartPurgatory();                
+                this.RestartPurgatory();
             });
 
             // setup controlls
@@ -132,6 +132,26 @@ namespace state {
                 .To({x: 0, y: 0}, 0.01)
                 .Start();
         }
+        
+        BlinkScreen(time: number = 1, rate: number = 0.05): void
+        {
+            let rect = new gfx.Rectangle(0, 0, this.Stage.Size.x, this.Stage.Size.y, {
+                fillStyle: 'white', compositeOperation: 'difference'
+            });
+            this.Stage.AddChild(rect);
+            
+            const callLimit = (time/rate) | 0;
+            
+            this.Timers.Repeat(rate, (count) => {
+                
+                if (count == callLimit) 
+                    rect.RemoveFromParent();
+                else 
+                    rect.Visible = !rect.Visible;
+                    
+            }, undefined, callLimit);            
+        }
+
         
         UpdateCamera(): void
         {
