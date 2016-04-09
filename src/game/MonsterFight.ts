@@ -1,12 +1,16 @@
 /// <reference path="../core/DisplayObject.ts" />
 /// <reference path="Assets.ts" />
 /// <reference path="actors/ACombatant.ts" />
+/// <reference path="actors/ATooth.ts" />
 /// <reference path="Context.ts" />
 
 namespace game {
     export class MonsterFight extends core.Layer<core.DisplayObject>
     {
-        Player: ACombatant;
+        Player:    ACombatant;
+        Teeth:     ATooth[] = [];
+        ToothPool: ATooth[] = [];
+
         TileSet: gfx.SpriteSheet;
         ActorLayer = new core.Layer<Actor>();
 
@@ -15,6 +19,7 @@ namespace game {
         velocityCap    = 3.0;
         realPosition   = 0.0; // initial position set here
         flapForce      = 1.0;
+        teethSpeed     = 0.5;
 
         constructor(x: number, y: number)
         {
@@ -25,6 +30,9 @@ namespace game {
 
             this.AddChild(this.ActorLayer);
             this.SpawnPlayer();
+            this.SpawnToothPair(70);
+            this.SpawnToothPair(100);
+            this.SpawnToothPair(130);
         }
 
         Flap(): void
@@ -32,7 +40,7 @@ namespace game {
             this.playerVelocity = -this.flapForce;
         }
 
-        Update(timeDelta: number): void
+        Update(dt: number): void
         {
             this.playerVelocity    += this.gravity;
 
@@ -48,14 +56,75 @@ namespace game {
             if (this.Player.Position.y > 64)
                 this.Player.Position.y = 64;
 
-            this.realPosition      += this.playerVelocity * timeDelta;
+            this.realPosition      += this.playerVelocity * dt;
             this.Player.Position.y += this.playerVelocity;
+
+            this.UpdateTeeth(dt);
+        }
+
+        UpdateTeeth(dt: number): void
+        {
+            var lastTooth = 0;
+            var newTeeth = [];
+            for (let tooth of this.Teeth) {
+                tooth.Position.x -= this.teethSpeed;
+                if (tooth.Position.x > lastTooth) {
+                    lastTooth = tooth.Position.x;
+                }
+                if (tooth.Position.x + tooth.Size.x < 0) {
+                    this.ToothPool.push(tooth);
+                } else {
+                    newTeeth.push(tooth);
+                }
+            }
+            this.Teeth = newTeeth;
+            // without this, teeth have a tendency to spawn closer and
+            // closer together over time. This prevents spawning them
+            // right after one another
+            if (lastTooth < 50) {
+                while (this.Teeth.length < 6) {
+                    this.SpawnToothPair(null);
+                }
+            }
         }
 
         private SpawnPlayer(): void
         {
             this.Player = new ACombatant(5, this.realPosition, this.TileSet);
             this.ActorLayer.AddChild(this.Player);
+        }
+
+        private SpawnToothPair(x: number): void
+        {
+            if (x == null) {
+                x = Math.floor(Math.random() * 5 + 70)
+            }
+            this.SpawnTooth(x, true);
+            this.SpawnTooth(x, false);
+        }
+
+        private SpawnTooth(x: number, upper: boolean): void
+        {
+            let actualHeight  = 40;
+            let desiredHeight = Math.floor(Math.random() * 10 + 10);
+            // yoff determins the offset between the middle of the gap
+            // and the middle of the screen. This is what we'll want
+            // to adjust (read: increase) once monster's eyes are added
+            let yoff = Math.floor(Math.random() * 10 - 5);
+            let y = upper ?  desiredHeight - actualHeight
+                          : 64 - desiredHeight;
+            y += yoff;
+            if (this.ToothPool.length > 0) {
+                let tooth = this.ToothPool.shift();
+                tooth.Position.x = x;
+                tooth.Position.y = y
+                this.Teeth.push(tooth);
+            } else {
+                console.log("Actually creating new tooth");
+                let tooth = new ATooth(x, y, 8, actualHeight);
+                this.Teeth.push(tooth);
+                this.ActorLayer.AddChild(tooth);
+            }
         }
     }
 }
