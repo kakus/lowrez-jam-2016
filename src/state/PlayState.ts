@@ -106,6 +106,7 @@ namespace state {
         {
             super.OnResize();
             this.Game.Context['imageSmoothingEnabled'] = false;
+            this.Game.Context['mozImageSmoothingEnabled'] = false;
         }
         
         RestartPurgatory(): void
@@ -157,11 +158,15 @@ namespace state {
         {
             // center camera on player
             core.vector.Subtract(this.ScreenCenter, this.Purgatory.Player.Position, this.Purgatory.Position);
+            
             // pan camera to map boundary
-            core.vector.Min(new core.Vector(0, 0), this.Purgatory.Position, this.Purgatory.Position);
-            let max = new core.Vector();
-            core.vector.Subtract(this.DefaultSize, this.Purgatory.Size, max);
-            core.vector.Max(max, this.Purgatory.Position, this.Purgatory.Position);
+            //
+            // TURNED OFF - can be removed after solving problem of seeing two paths (demon and item).
+            //
+            // core.vector.Min(new core.Vector(0, 0), this.Purgatory.Position, this.Purgatory.Position);
+            // let max = new core.Vector();
+            // core.vector.Subtract(this.DefaultSize, this.Purgatory.Size, max);
+            // core.vector.Max(max, this.Purgatory.Position, this.Purgatory.Position);
         }
 
     }
