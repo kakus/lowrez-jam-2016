@@ -13,7 +13,12 @@ namespace gfx {
         
         constructor(
             public ImageId: string,
-            public CellSize: number
+            public CellSize: core.Vector,
+            /**
+             * This offset will be just used for sprite extraction. It won't be counted
+             * in any sanity checks.
+             */
+            public Offset = new core.Vector()
         ) {
             let tileset = Sprite.ImageCache[ImageId]
              
@@ -46,13 +51,16 @@ namespace gfx {
             
             core.Assert(x < this.GridSize.x && y < this.GridSize.y, `Sprite id:${id} is out of bounds.`);
             
-            return new core.Rect(x * this.CellSize, y * this.CellSize, this.CellSize, this.CellSize);
+            return new core.Rect(
+                x * this.CellSize.x + this.Offset.x, 
+                y * this.CellSize.y + this.Offset.y,
+                this.CellSize.x, this.CellSize.y);
         }
         
         private UpdateGridSize(): void
         {
-            let cols = this.ImageSize.x / this.CellSize;
-            let rows = this.ImageSize.y / this.CellSize;
+            let cols = this.ImageSize.x / this.CellSize.x;
+            let rows = this.ImageSize.y / this.CellSize.y;
             
             core.Assert(cols % 1 === 0, "Width of image doesn't match grid size.");
             core.Assert(rows % 1 === 0, "Height of image doesn't match grid size.");

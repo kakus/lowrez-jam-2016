@@ -5,10 +5,10 @@
 /// <reference path="state/Loading.ts" />
 
 
-let mgame = new core.Game('canvas');
-mgame.AddState('splash', new state.SplashScreen());
-mgame.AddState('loading', new state.LoadingState());
-mgame.AddState('menu', new state.Menu());
-mgame.AddState('play', new state.PlayState());
-mgame.Play('play');
-mgame.Start();
+let GAME = new core.Game('canvas');
+GAME.AddState('splash', new state.SplashScreen());
+GAME.AddState('loading', new state.LoadingState());
+GAME.AddState('menu', new state.Menu());
+GAME.AddState('play', new state.PlayState());
+GAME.Play('play');
+GAME.Start();

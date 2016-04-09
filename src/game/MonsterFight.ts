@@ -21,7 +21,7 @@ namespace game {
             super(x, y);
             game.context.MonsterFight = this;
 
-            this.TileSet = new gfx.SpriteSheet('spritesheet', 24);
+            this.TileSet = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
 
             this.AddChild(this.ActorLayer);
             this.SpawnPlayer();

@@ -27,5 +27,6 @@ namespace core {
             this.Size.Clone(out.Size);
             return out;
         }
+        
     }
 }

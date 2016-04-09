@@ -43,21 +43,14 @@ namespace state {
             
             super.Start();
             
-            // setup title
-            this.Score = new gfx.AAText(32, 1, "SCORE 0");
-            this.Score.Anchor.Set(0.5, 0);
-            // Set height of character in pixels
-            this.Score.SetSize(5);
-            this.Stage.AddChild(this.Score);
+            game.context.PlayState = this;
             
             gfx.Sprite.Load(
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
-                game.context.PlayState = this;
                 this.MonsterFight = new game.MonsterFight(0.5, 0.5);
                 this.Stage.AddChild(this.MonsterFight);
-                //this.Purgatory = new game.Purgatory(0.5, 0.5);
-                //this.Stage.AddChild(this.Purgatory);
+                //this.RestartPurgatory();                
             });
 
             // setup controlls
@@ -114,12 +107,7 @@ namespace state {
                     this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
 
                 this.Purgatory.Update(timeDelta);
-                
-                // let pos = this.Purgatory.ToGlobal(this.Purgatory.Player.Position);
-                // console.log(pos);
-                // core.vector.Subtract(pos, new core.Vector(10, 10), this.Purgatory.Position);
-                core.vector.Subtract(this.ScreenCenter, this.Purgatory.Player.Position, this.Purgatory.Position);
-                // this.Purgatory.Position.Set(-this.Purgatory.Player.Position.x + 20, -this.Purgatory.Player.Position.y + 20);
+                this.UpdateCamera();
             }
         }
         
@@ -127,6 +115,14 @@ namespace state {
         {
             super.OnResize();
             this.Game.Context['imageSmoothingEnabled'] = false;
+        }
+        
+        RestartPurgatory(): void
+        {
+            if (this.Purgatory) this.Purgatory.RemoveFromParent();
+            
+            this.Purgatory = new game.Purgatory(0.5, 0.5);
+            this.Stage.AddChild(this.Purgatory);
         }
         
         ShakeScreen(time: number, amplitude: number = 7): core.Tween
@@ -144,6 +140,17 @@ namespace state {
                 // restore
                 .To({x: 0, y: 0}, 0.01)
                 .Start();
+        }
+        
+        UpdateCamera(): void
+        {
+            // center camera on player
+            core.vector.Subtract(this.ScreenCenter, this.Purgatory.Player.Position, this.Purgatory.Position);
+            // pan camera to map boundary
+            core.vector.Min(new core.Vector(0, 0), this.Purgatory.Position, this.Purgatory.Position);
+            let max = new core.Vector();
+            core.vector.Subtract(this.DefaultSize, this.Purgatory.Size, max);
+            core.vector.Max(max, this.Purgatory.Position, this.Purgatory.Position);
         }
 
     }

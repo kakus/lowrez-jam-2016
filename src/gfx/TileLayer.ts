@@ -27,13 +27,13 @@ namespace gfx {
                     if (id == 0) return;
                     
                     let tile = this.TileSet.GetSprite(id);
-                    tile.Position.Set(x * this.CellSize, y * this.CellSize);
+                    tile.Position.Set(x * this.CellSize.x, y * this.CellSize.y);
                     this.AddChild(tile);    
                 });
             });
             
             this.GridSize.Set(this.Data[0].length, this.Data.length);
-            core.vector.Scale(this.GridSize, this.CellSize, this.Size);
+            core.vector.Multiply(this.GridSize, this.CellSize, this.Size);
         }
     }
 }

@@ -1,17 +1,21 @@
 /// <reference path="../Actor.ts" />
 
 namespace game {
-    
-    const FLAP_FORCE = 0.5;
-    
     export class ACombatant extends Actor
     {
+        Sprite: gfx.Sprite;
+
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
-            super(x, y, sheet.GetSprite(assets.HERO_FACE_LEFT));
+            super(x, y, 24, 24);
             this.Sprite = sheet.GetSprite(assets.HERO_FACE_LEFT);
             this.Sprite.Scale.x *= -1;
             this.Sprite.Anchor.Set(0.5, 0.5);
+        }
+
+        protected DrawSelf(ctx: CanvasRenderingContext2D): void
+        {
+            this.Sprite.Draw(ctx);
         }
 
         Start(): void
