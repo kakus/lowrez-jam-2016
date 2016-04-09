@@ -13,8 +13,7 @@ namespace game {
         FLOATING_TILE_FRAMES: [1, 2, 3, 4, 5],
         
         SMALL_SHADOW : 31,
-        DUST_CLOUD_1 : 41,
-        DUST_CLOUD_2 : 42
+        TORCH_FRAMES: [41, 42, 43, 44]
     }
     
 }

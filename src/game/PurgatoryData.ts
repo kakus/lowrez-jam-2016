@@ -24,8 +24,8 @@ namespace game.data {
         export const actors: number[][] = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
+            [0, t, 0, 0],
             [0, 0, 0, 0],
-            [0, 0, 0, t],
             [0, 0, 0, 0]
         ];
         
