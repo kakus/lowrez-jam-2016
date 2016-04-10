@@ -20,6 +20,7 @@ namespace game {
             this.Animator.AddAnimation('left', [assets.HERO_FACE_LEFT], sheet);
             this.Animator.AddAnimation('right', [assets.HERO_FACE_RIGHT], sheet);
             this.Animator.AddAnimation('up', [assets.HERO_FACE_UP], sheet);
+            this.Animator.AddAnimation('falling', [assets.HERO_FALLING], sheet);
             
             this.Shadow = sheet.GetSprite(assets.SMALL_SHADOW);
             this.Animator.Play('left');
@@ -38,19 +39,36 @@ namespace game {
             return this.Tween.New(this.Position)
                 .To({x: dest.x, y: dest.y}, JUMP_DURATION, core.easing.SinusoidalInOut)
                 .Parallel(this.Sprite.Position, t => t 
-                    .To({y: this.Sprite.Position.y - 10}, JUMP_DURATION/2, core.easing.OutCubic)
+                    .To({y: this.Sprite.Position.y - 10}, JUMP_DURATION/2, core.easing.CubicOut)
                     .Then()
                     .To({y: this.Sprite.Position.y}, JUMP_DURATION/2))
                 .WhenDone(() => audio.manager.Play('landing'))
                 .Start();
         }
         
-        PlayDead(): core.Tween
+        PlayDead(fallDistance: number = 10): core.Tween
         {
             return this.Tween.New(this)
                 .To({Alpha: 0}, VANISH_TIME)
                 .Parallel(this.Position, t => t
-                    .To({y: this.Position.y + 10}, VANISH_TIME, core.easing.OutCubic))
+                    .To({y: this.Position.y + fallDistance}, VANISH_TIME, core.easing.CubicOut))
+                .Start();
+        }
+        
+        FallFromHeaven(): void
+        {
+            let top = this.ToLocal(new core.Vector(GAME.Canvas.width/2, 0));
+            this.Sprite.Position.Set(top.x - 12, top.y - 12);
+            console.log("hero pos " + this.Sprite.Position);
+            
+            this.Animator.Play('falling');
+            
+            this.Tween.New(this.Sprite.Position)
+                .To({x: 0, y: 0}, 1, core.easing.CubicIn)
+                .WhenDone(() => context.PlayState.ShakeScreen(0.5))
+                .Then()
+                .Delay(1)
+                .WhenDone(() => this.Animator.Play('left'))
                 .Start();
         }
         

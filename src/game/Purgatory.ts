@@ -47,9 +47,6 @@ namespace game {
     
     export class Purgatory extends core.Layer<core.DisplayObject>
     {
-        Player: AHero;
-        SpriteSheet: gfx.SpriteSheet;
-        
         // first layer to be rendered.
         GroundLayer = new core.Layer<AFloatingTile>();
         // 2d array of references to ground tiles.
@@ -57,10 +54,14 @@ namespace game {
         GroundLookup: AFloatingTile[][] = [];
         // living object rendered on top of other layers.
         ActorLayer = new core.Layer<Actor>();
+        
         Demons: ADemon[] = [];
         Items: AItem[] = [];
-        
+        Player: AHero;
+        SpriteSheet: gfx.SpriteSheet;
         Spawner: ContextSpawner;
+        
+        Timer = new core.TimersManager();
                 
         constructor(x: number, y: number)
         {
@@ -84,6 +85,7 @@ namespace game {
             {
                 actor.Update(timeDelta);
             }
+            this.Timer.Update(timeDelta);
         }
         
         MovePlayer(dir: MoveDirection): void
@@ -108,7 +110,7 @@ namespace game {
                 
                 this.Player
                     .PlayJump(futurePos)
-                    .WhenDone(() => this.SpecialAction(this.Player.GridPosition));
+                    .WhenDone(() => this.TileAction(this.Player.GridPosition));
             }
             else
             {
@@ -135,7 +137,7 @@ namespace game {
                 });                        
         }
         
-        private SpecialAction(gridPos: core.Vector): boolean
+        private TileAction(gridPos: core.Vector): boolean
         {
             for (let demon of this.Demons) 
             {
@@ -166,7 +168,16 @@ namespace game {
                     this.ShowText(item.GetDescription()[0], 'white', 15)
                     this.ShowText(item.GetDescription()[1], 'white', 21)
                         .WhenDone(() => {
-                            context.PlayState.RestartPurgatory();
+                            let {x, y} = this.Player.GridPosition;
+                            this.GroundLookup[y][x].Collapse();
+                            item.Visible = false;
+                            
+                            context.PlayState.DimScreen();
+                                
+                            this.Player.PlayDead(30)
+                                .WhenDone(() => {
+                                    context.PlayState.RestartPurgatory();
+                                });
                         })
                 }
             }
@@ -264,7 +275,10 @@ namespace game {
                   switch (tileId) {
                       case 0: return;
                       case 2: actor = new ATorch(0, 0, this.SpriteSheet); break;
-                      case 3: actor = this.Player = new AHero(0, 0, this.SpriteSheet); break;
+                      case 3: 
+                        actor = this.Player = new AHero(0, 0, this.SpriteSheet);
+                        this.Timer.Delay(0.1, () => this.Player.FallFromHeaven());
+                        break;
                       
                       case 4: 
                       case 5: 

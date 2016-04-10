@@ -3,6 +3,8 @@
 /// <reference path="../Context.ts" />
 /// <reference path="../../gfx/Rectangle.ts" />
 /// <reference path="../../audio/AudioManager.ts" />
+/// <reference path="../../core/Random.ts" />
+
 
 
 namespace game {

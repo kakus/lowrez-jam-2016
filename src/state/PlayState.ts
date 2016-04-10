@@ -105,14 +105,19 @@ namespace state {
         OnResize(): void
         {
             super.OnResize();
+            audio.manager.Volume = 0;
             this.Game.Context['imageSmoothingEnabled'] = false;
             this.Game.Context['mozImageSmoothingEnabled'] = false;
+            this.Game.Context['webkitImageSmoothingEnabled'] = false;
+            this.Game.Context['msImageSmoothingEnabled'] = false;
         }
         
         RestartPurgatory(): void
         {
             if (this.Purgatory) this.Purgatory.RemoveFromParent();
             
+            this.Stage.Alpha = 1;
+            this.DimScreen(true);
             this.Purgatory = new game.Purgatory(0.5, 0.5);
             this.Stage.AddChild(this.Purgatory);
         }
@@ -152,7 +157,16 @@ namespace state {
                     
             }, undefined, callLimit);            
         }
-
+        
+        DimScreen(reverse = false, time = 2): core.Tween
+        {
+            if (reverse) {
+                this.Stage.Alpha = 1 - this.Stage.Alpha;
+            }
+            return this.Tweens.New(this.Stage)
+                .To({Alpha: reverse ? 1 : 0}, time)
+                .Start();
+        }
         
         UpdateCamera(): void
         {

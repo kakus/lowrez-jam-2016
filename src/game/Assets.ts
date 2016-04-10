@@ -8,6 +8,7 @@ namespace game {
         HERO_FACE_UP : 1,
         HERO_FACE_LEFT : 2,
         HERO_FACE_RIGHT : 3,
+        HERO_FALLING : 4,
         
         // these have difference index since, this index is counted from
         // grid [24, 48] with offset [0,24]
