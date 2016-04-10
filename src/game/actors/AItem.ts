@@ -34,7 +34,7 @@ namespace game {
         {
             this.Tween.StopAll(false);
             return this.Tween.New(this.Sprite.Position)
-                .To({y: -20}, 1, core.easing.OutCubic)
+                .To({y: -20}, 1, core.easing.CubicOut)
                 .Start();
         }
         

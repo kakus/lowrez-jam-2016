@@ -274,12 +274,21 @@ namespace core {
 			return c * t / d + b;
 		}
 		
-		export function OutCubic(t, b, c, d): number
+        /** Slows at the end of tween */
+		export function CubicOut(t, b, c, d): number
 		{
 			t /= d;
 			t--;
 			return c * (t * t * t + 1) + b;
 		}
+        
+        /** Increases speed at the end of tween */
+        export function CubicIn(t, b, c, d): number
+        {
+            t /= d;
+            return c * t * t * t + b;
+        };
+
 		
 		export function SinusoidalInOut(t, b, c, d): number
 		{
