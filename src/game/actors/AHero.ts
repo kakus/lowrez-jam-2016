@@ -24,11 +24,6 @@ namespace game {
             this.Shadow = sheet.GetSprite(assets.SMALL_SHADOW);
             this.Animator.Play('left');
         }
-         
-        Start(): void
-        {
-            console.log("hello from hero.")
-        }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void
         {

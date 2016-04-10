@@ -15,11 +15,6 @@ namespace game {
             this.Label.Size.Clone(this.Size);    
         }
         
-        Start() 
-        {
-            
-        }
-        
         DrawSelf(ctx: CanvasRenderingContext2D): void
         {
             this.Label.Draw(ctx);

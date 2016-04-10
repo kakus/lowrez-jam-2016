@@ -30,11 +30,6 @@ namespace game {
             this.SetupDustParticles(sheet);
         }
         
-        Start(): void
-        {
-            
-        }
-        
         Collapse(): void
         {
             let pos = this.Sprite.Position;

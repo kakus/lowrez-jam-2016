@@ -23,13 +23,7 @@ namespace game {
         constructor(x: number, y: number, width: number, height: number)
         {
             super(x, y, width, height);
-            this.Timer.Delay(0, this.Start, this);
         }
-        
-        /**
-         * Called once before first update.
-         */
-        abstract Start(): void;
         
         Update(timeDelta: number): void
         {

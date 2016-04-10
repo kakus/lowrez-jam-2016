@@ -4,10 +4,7 @@ namespace game {
     
     export abstract class ADemon extends AnimatedActor 
     {
-        Start(): void
-        {
-            
-        }
+
     }
     
     export class ARedDemon extends ADemon
