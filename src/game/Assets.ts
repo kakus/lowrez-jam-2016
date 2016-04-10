@@ -14,10 +14,15 @@ namespace game {
         FLOATING_TILE_FRAMES: [1, 2, 3, 4, 5],
         
         SMALL_SHADOW : 31,
+        HEART: 32,
         TORCH_FRAMES: [41, 42, 43, 44],
         
         // same grid as floating tile frames
-        RED_DEMON_FRAMES: [21, 22]
+        RED_DEMON_FRAMES: [21, 22],
+        BLUE_DEMON_FRAMES: [23, 24],
+        GREEN_DEMON_FRAMES: [25, 26],
+        PURPLE_DEMON_FRAMES: [27, 28],
+        DARK_DEMON_FRAMES: [29, 30],
     }
     
 }
