@@ -43,6 +43,8 @@ namespace game {
         {
             super.Update(timeDelta);
             this.Sprite.Update(timeDelta);
+            // forbid subpixel movement
+            this.Sprite.Position.Set(this.Sprite.Position.x | 0, this.Sprite.Position.y | 0);
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void

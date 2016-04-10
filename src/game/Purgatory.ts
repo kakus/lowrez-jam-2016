@@ -58,6 +58,7 @@ namespace game {
         // living object rendered on top of other layers.
         ActorLayer = new core.Layer<Actor>();
         Demons: ADemon[] = [];
+        Items: AItem[] = [];
         
         Spawner: ContextSpawner;
                 
@@ -242,11 +243,15 @@ namespace game {
                       case 5: 
                       case 6: 
                         actor = this.Spawner.SpawnActor(actorSlot++); 
-                        if (actor) {
+                        if (actor instanceof ADemon) {
                             this.Demons.push(actor as ADemon);
-                        } else {
-                            return;
                         } 
+                        else if (actor instanceof AItem) {
+                            this.Items.push(actor);
+                        } 
+                        else {
+                            return;
+                        }
                         break;
                       default: console.error(`actor not mapped. (${tileId})`); return;
                   }
@@ -309,6 +314,9 @@ namespace game {
                     case 'Green': return new AGreenDemon(0, 0, this.Sheet);
                     case 'Purple': return new APurpleDemon(0, 0, this.Sheet);
                     case 'Dark': return new ADarkDemon(0, 0, this.Sheet);
+                    
+                    case 'Life': return new ALifeBonus(0, 0, this.Sheet);
+                    case 'Attack': return new AAttackBonus(0, 0, this.Sheet);
                 }
             }
             

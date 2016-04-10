@@ -14,7 +14,8 @@ namespace game {
         FLOATING_TILE_FRAMES: [1, 2, 3, 4, 5],
         
         SMALL_SHADOW : 31,
-        HEART: 32,
+        HEART: 33,
+        ATTACK_BONUS: 34,
         TORCH_FRAMES: [41, 42, 43, 44],
         
         // same grid as floating tile frames
