@@ -325,7 +325,7 @@ namespace core {
         {
             for (let i = this.Tweens.length - 1; i >= 0; --i)
             {
-                this.Tweens[i].Stop();
+                this.Tweens[i].Stop(finishTween);
             }
         }
 	}
