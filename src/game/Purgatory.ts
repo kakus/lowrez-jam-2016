@@ -129,51 +129,78 @@ namespace game {
         private PlayerDied(): void
         {
             this.Player.PlayDead();
-                        
-            let center = new core.Vector(GAME.Canvas.width/2, GAME.Canvas.height/2);
-            center = this.ToLocal(center);
-            
-            let text = new AText(0, center.y, "YOU DIED");
-            text.Label.SetColor('red');
-            text.Anchor.Set(0.5, 0.5);
-            text.Position.x = center.x + text.Size.x * 2;
-            
-            text.Tween.New(text.Position)
-                .To({x: center.x}, 1, core.easing.SinusoidalInOut)
-                .Then()
-                .Delay(2)
-                .Then()
-                .To({x: -text.Size.x * 2}, 1, core.easing.SinusoidalInOut)
-                .Start()
+            this.ShowText("YOU DIED", 'red')
                 .WhenDone(() => {
-                    text.RemoveFromParent();
                     context.PlayState.RestartPurgatory();
-                });
-                
-            this.ActorLayer.AddChild(text);
+                });                        
         }
         
         private SpecialAction(gridPos: core.Vector): boolean
         {
-            for (let demon of this.Demons)
+            for (let demon of this.Demons) 
             {
-                if (demon.GridPosition.x == gridPos.x && demon.GridPosition.y == gridPos.y)
+                if (demon.GridPosition.x == gridPos.x && demon.GridPosition.y == gridPos.y) 
                 {
                     this.Player.IsActive = false;
                     context.KilledDemons.push(demon.Name);
-                    
+
                     context.PlayState.Timers.Delay(0.7, () => {
-                        
+
                         context.PlayState.BlinkScreen(1);
                         context.PlayState.ShakeScreen(1).WhenDone(() => {
                             context.PlayState.RestartPurgatory();
                         });
-                        
+
                     });
-                    // this.PlayerDied();
                 }
-             }
+            }
+            
+            for (let item of this.Items)
+            {
+                if (item.GridPosition.x == gridPos.x && item.GridPosition.y == gridPos.y) 
+                {
+                    this.Player.IsActive = false;
+                    context.AquiredItems.push(item.Name);
+                    
+                    item.ShowInGlory();
+                    this.ShowText(item.GetDescription()[0], 'white', 15)
+                    this.ShowText(item.GetDescription()[1], 'white', 21)
+                        .WhenDone(() => {
+                            context.PlayState.RestartPurgatory();
+                        })
+                }
+            }
+             
+             
             return false;
+        }
+        
+        private ShowText(msg: string, color = 'white', offsetY = 0): core.Tween
+        {
+            let center = new core.Vector(GAME.Canvas.width/2, GAME.Canvas.height/2);
+            center = this.ToLocal(center);
+            
+            let text = new AText(0, center.y + offsetY, msg.toUpperCase());
+            text.Label.SetColor(color);
+            text.Anchor.Set(0.5, 0.5);
+            text.Position.x = this.ToLocal(new core.Vector(GAME.Canvas.width, 0)).x + 20;
+            
+            // let bg = new gfx.Rectangle(center.x, center.y, this.Parent.Size.x, text.Size.y + 5, {fillStyle: "rgba(0, 0, 0, 0.5)"});
+            // bg.Anchor.Set(0.5, 0.5);
+            
+            this.ActorLayer.AddChild(text);
+                        
+            return text.Tween.New(text.Position)
+                .To({x: center.x}, 1, core.easing.SinusoidalInOut)
+                .Then()
+                .Delay(2)
+                .Then()
+                .To({x: this.ToLocal(core.vector.Zero).x - 20}, 1, core.easing.SinusoidalInOut)
+                .Start()
+                .WhenDone(() => {
+                    text.RemoveFromParent();
+                });
+                
         }
         
         private CanMoveTo(gridPos: core.Vector): boolean

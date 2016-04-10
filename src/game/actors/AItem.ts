@@ -2,7 +2,7 @@
 
 namespace game {
     
-    export class AItem extends AnimatedActor
+    export abstract class AItem extends AnimatedActor
     {
         Shadow: gfx.Sprite;
         
@@ -29,6 +29,19 @@ namespace game {
             this.Shadow.Draw(ctx);
             this.Sprite.Draw(ctx);
         }
+        
+        ShowInGlory(): core.Tween
+        {
+            this.Tween.StopAll(false);
+            return this.Tween.New(this.Sprite.Position)
+                .To({y: -20}, 1, core.easing.OutCubic)
+                .Start();
+        }
+        
+        /**
+         * Return description of item, top line and bottom line.
+         */
+        abstract GetDescription(): [string, string];
     }
     
     export class ALifeBonus extends AItem
@@ -37,6 +50,11 @@ namespace game {
         {
             super(x, y, [assets.HEART], sheet, 'Life');
         }
+        
+        GetDescription(): [string, string]
+        {
+            return ["hitpoints", "increased"];
+        }
     }
     
     export class AAttackBonus extends AItem
@@ -44,6 +62,11 @@ namespace game {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
             super(x, y, [assets.ATTACK_BONUS], sheet, 'Attack');
+        }
+        
+        GetDescription(): [string, string]
+        {
+            return ["attack", "increased"];
         }
     }
 }
