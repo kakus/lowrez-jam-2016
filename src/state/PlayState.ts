@@ -122,7 +122,7 @@ namespace state {
             this.Stage.AddChild(this.Purgatory);
         }
         
-        ShakeScreen(time: number, amplitude: number = 7): core.Tween
+        ShakeScreen(time: number, amplitude: number = 5): core.Tween
         {
             return this.Tweens.New(this.Stage.Position)
                 .OnUpdate((position, progress) =>{
