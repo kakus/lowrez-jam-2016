@@ -12,6 +12,7 @@ namespace game {
     {
         Face : 'left' | 'right' | 'up' = 'left';
         Shadow: gfx.Sprite;
+        DustParticles: core.Layer<gfx.Rectangle>;
         
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
@@ -25,11 +26,15 @@ namespace game {
             
             this.Shadow = sheet.GetSprite(assets.SMALL_SHADOW);
             this.Animator.Play('left');
+            
+            this.SetupDustParticles();
+            this.Alpha = 0;
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void
         {
             this.Shadow.Draw(ctx);
+            this.DustParticles.Draw(ctx);
             this.Sprite.Draw(ctx);
         }
         
@@ -59,15 +64,17 @@ namespace game {
         FallFromHeaven(): void
         {
             let top = this.ToLocal(new core.Vector(GAME.Canvas.width/2, 0));
-            this.Sprite.Position.Set(top.x - 12, top.y - 12);
+            this.Sprite.Position.Set(top.x - 12, top.y - 24);
             console.log("hero pos " + this.Sprite.Position);
             
             this.Animator.Play('falling');
+            this.Alpha = 1;
             
             this.Tween.New(this.Sprite.Position)
                 .To({x: 0, y: 0}, 1, core.easing.CubicIn)
                 .WhenDone(() => {
                     context.PlayState.ShakeScreen(0.5);
+                    this.EmitParticles();
                 })
                 .Then()
                 .Delay(1.5)
@@ -90,6 +97,49 @@ namespace game {
             }
             
             this.Animator.Play(this.Face);
+        }
+        
+         private EmitParticles(): void
+        {
+            this.DustParticles.Visible = true;
+            this.DustParticles.Children.forEach(dust => {
+                
+                dust.Position.Set(12, 15);
+                dust.Size.Set(1, 1);
+                
+                let dest = new core.Vector(0, 1);
+                core.vector.Rotate(dest, core.Random(-Math.PI, Math.PI));
+                core.vector.Scale(dest, 8);
+                core.vector.Add(dust.Position, dest, dest);
+                
+                const DUST_TIME = 1;
+                
+                dust.Alpha = 0;
+                this.Tween.New(dust.Position)
+                    .To({x: dest.x, y: dest.y - 3}, DUST_TIME)
+                    .OnUpdate(() => {
+                        dust.Position.Set(dust.Position.x | 0, dust.Position.y | 0);
+                    })
+                    .Parallel(dust, t => t
+                        .To({Alpha: 1}, DUST_TIME/2)
+                        .Then()
+                        .To({Alpha: 0}, DUST_TIME/2))
+                    .Start();
+            });
+        }
+        
+        private SetupDustParticles(): void
+        {
+            this.DustParticles = new core.Layer<gfx.Rectangle>();
+            this.DustParticles.Alpha = 0.2;
+            this.DustParticles.Visible = false;
+            
+            for (let i = 0; i < 40; ++i)
+            {
+                // let s = sheet.GetSprite(i % 2 ? assets.DUST_CLOUD_1: assets.DUST_CLOUD_2);
+                let s = new gfx.Rectangle(0, 0, 2, 2, {fillStyle: '#c0c0c0'});
+                this.DustParticles.AddChild(s);
+            };
         }
         
     }

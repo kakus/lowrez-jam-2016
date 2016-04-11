@@ -292,7 +292,7 @@ namespace game {
                       case 2: actor = new ATorch(0, 0, this.SpriteSheet); break;
                       case 3: 
                         actor = this.Player = new AHero(0, 0, this.SpriteSheet);
-                        this.Timer.Delay(0.1, () => this.Player.FallFromHeaven());
+                        this.Timer.Delay(0.8, () => this.Player.FallFromHeaven());
                         break;
                       
                       case 4: 
