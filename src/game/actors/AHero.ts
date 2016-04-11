@@ -21,6 +21,7 @@ namespace game {
             this.Animator.AddAnimation('right', [assets.HERO_FACE_RIGHT], sheet);
             this.Animator.AddAnimation('up', [assets.HERO_FACE_UP], sheet);
             this.Animator.AddAnimation('falling', [assets.HERO_FALLING], sheet);
+            this.Animator.AddAnimation('landing', assets.HERO_LANDING, sheet).Duration = 0.7;
             
             this.Shadow = sheet.GetSprite(assets.SMALL_SHADOW);
             this.Animator.Play('left');
@@ -65,7 +66,12 @@ namespace game {
             
             this.Tween.New(this.Sprite.Position)
                 .To({x: 0, y: 0}, 1, core.easing.CubicIn)
-                .WhenDone(() => context.PlayState.ShakeScreen(0.5))
+                .WhenDone(() => {
+                    context.PlayState.ShakeScreen(0.5);
+                })
+                .Then()
+                .Delay(1.5)
+                .WhenDone(() => this.Animator.Play('landing'))
                 .Then()
                 .Delay(1)
                 .WhenDone(() => this.Animator.Play('left'))

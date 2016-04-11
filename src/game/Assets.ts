@@ -9,14 +9,16 @@ namespace game {
         HERO_FACE_LEFT : 2,
         HERO_FACE_RIGHT : 3,
         HERO_FALLING : 4,
+        HERO_LANDING : [5, 6, 7, 8],
         
         // these have difference index since, this index is counted from
         // grid [24, 48] with offset [0,24]
         FLOATING_TILE_FRAMES: [1, 2, 3, 4, 5],
         
         SMALL_SHADOW : 31,
-        HEART: 33,
+        HEART: [35, 36],
         ATTACK_BONUS: 34,
+        SWORD: [71, 72, 73, 74, 75, 76, 77, 78],
         TORCH_FRAMES: [41, 42, 43, 44],
         
         // same grid as floating tile frames

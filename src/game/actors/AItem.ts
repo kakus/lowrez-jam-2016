@@ -10,7 +10,7 @@ namespace game {
             public Name: string
         ) {
             super(x, y, 24, 24); 
-            this.Animator.AddAnimation('idle', frames, sheet);
+            this.Animator.AddAnimation('idle', frames, sheet).Loop = true;
             this.Animator.Play('idle');
             
             this.Shadow = sheet.GetSprite(assets.SMALL_SHADOW);
@@ -34,7 +34,7 @@ namespace game {
         {
             this.Tween.StopAll(false);
             return this.Tween.New(this.Sprite.Position)
-                .To({y: -20}, 1, core.easing.CubicOut)
+                .To({y: -18}, 1, core.easing.CubicOut)
                 .Start();
         }
         
@@ -48,7 +48,7 @@ namespace game {
     {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
-            super(x, y, [assets.HEART], sheet, 'Life');
+            super(x, y, assets.HEART, sheet, 'Life');
         }
         
         GetDescription(): [string, string]
@@ -61,7 +61,7 @@ namespace game {
     {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
-            super(x, y, [assets.ATTACK_BONUS], sheet, 'Attack');
+            super(x, y, assets.SWORD, sheet, 'Attack');
         }
         
         GetDescription(): [string, string]
