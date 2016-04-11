@@ -24,7 +24,9 @@ namespace game {
     const LEVEL_2_ITEMS = ['Punch', 'Light'];
     const LEVEL_BOSS = ['Dark'];
     
-    let TMP_VEC = new core.Vector();
+    const TMP_VEC = new core.Vector();
+    const CULL_OFFSET = 24 * 4;
+    
     
     /**
      * Purgatory layout, should be generated once per page load/game load.
@@ -79,20 +81,22 @@ namespace game {
         
         Update(timeDelta: number): void
         {
+            // actor screen position 
             let screen = TMP_VEC;
-            // console.log(context.PlayState.Stage.Position + "");
+            
             for (let actor of this.GroundLayer.Children)
             {
                 actor.Update(timeDelta);
+                
                 this.ToGlobal(actor.Position, screen);
-                // actor.Visible = context.PlayState.Stage.IsPointInside(screen, true, new core.Vector(12, 12));
-                actor.Visible = screen.x > -48 && screen.x < GAME.Canvas.width && screen.y > -48 && screen.y < GAME.Canvas.height;
+                actor.Visible = screen.x > -CULL_OFFSET && screen.x < GAME.Canvas.width && screen.y > -CULL_OFFSET && screen.y < GAME.Canvas.height;
             }
             for (let actor of this.ActorLayer.Children)
             {
-                this.ToGlobal(actor.Position, screen);
                 actor.Update(timeDelta);
-                actor.Visible = screen.x > -48 && screen.x < GAME.Canvas.width && screen.y > -48 && screen.y < GAME.Canvas.height;
+                
+                this.ToGlobal(actor.Position, screen);
+                actor.Visible = screen.x > -CULL_OFFSET && screen.x < GAME.Canvas.width && screen.y > -CULL_OFFSET && screen.y < GAME.Canvas.height;
             }
             // console.log("clipped tiles",this.GroundLayer.Children.map(t => t.Visible ? 0 : 1).reduce((p,c) => p + c, 0), this.GroundLayer.Children.length,
             //     "clipped actors",this.ActorLayer.Children.map(t => t.Visible ? 0 : 1).reduce((p,c) => p + c, 0), this.ActorLayer.Children.length);
