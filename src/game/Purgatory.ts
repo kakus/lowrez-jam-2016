@@ -237,43 +237,43 @@ namespace game {
             }
             
             let tile = this.GroundLookup[gridPos.y][gridPos.x];
-            if (tile && tile.IsActive === false)
+            
+            if (tile)
             {
-                return false;
+                return tile.IsActive;
             }
-            
-            const row = game.data.layer.collision[gridPos.y]
-            
-            if (row)
-            {
-                return row[gridPos.x] !== undefined && 
-                       game.data.layer.collision[gridPos.y][gridPos.x] === 0;
-            }
-            
             return false; 
         }
         
         private BuildTileLayers(): void
         {
-            this.CheckLayers();
-            
             data.layer.ground.forEach((row, y) => {
                 this.GroundLookup.push([]);
                 
                 row.forEach((tileId, x) => {
-                  let tile: AFloatingTile;
+                    let tile: AFloatingTile;
                   
-                  switch (tileId) {
-                      case 0: return;
-                      case 1: tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId); break;
-                      default: throw new Error('tile not mapped.')
-                  }
+                    switch (tileId) {
+                        case 0: return;
+                        case 1: tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId); break;
+                        // tiles unlocked when all bosess are killed 
+                        case 11:
+                            if (context.KilledDemons.length === 4) {
+                                tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId);                                
+                            }
+                            else {
+                                return;
+                            }
+                            break;
+                        
+                        default: throw new Error('tile not mapped.')
+                    }
                   
-                  tile.GridPosition.Set(x, y);
-                  core.vector.Multiply(tile.GridPosition, this.SpriteSheet.CellSize, tile.Position);
-                  
-                  this.GroundLookup[y][x] = tile;
-                  this.GroundLayer.AddChild(tile);
+                    tile.GridPosition.Set(x, y);
+                    core.vector.Multiply(tile.GridPosition, this.SpriteSheet.CellSize, tile.Position);
+                    
+                    this.GroundLookup[y][x] = tile;
+                    this.GroundLayer.AddChild(tile);
                 });
             });
             
@@ -322,18 +322,7 @@ namespace game {
             this.AddChild(this.GroundLayer);
             this.AddChild(this.ActorLayer);
         }
-        
-        private CheckLayers(): void
-        {
-            var layers = [game.data.layer.collision,
-                game.data.layer.ground];
-                // game.data.layer.static];
-                
-            core.Assert(layers.every(layer => {
-                return layer.length === game.data.layer.collision.length &&
-                       layer.every(row => row.length === game.data.layer.collision[0].length);
-            }), "Each layer has to have the same size.");
-        }
+
     }
     
     

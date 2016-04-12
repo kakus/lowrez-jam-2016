@@ -29,6 +29,7 @@ namespace game {
             
             this.SetupDustParticles();
             this.Alpha = 0;
+            this.IsActive = false;
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void
@@ -78,7 +79,10 @@ namespace game {
                 })
                 .Then()
                 .Delay(1.5)
-                .WhenDone(() => this.Animator.Play('landing'))
+                .WhenDone(() => {
+                    this.Animator.Play('landing');
+                    this.IsActive = true;
+                })
                 .Then()
                 .Delay(1)
                 .WhenDone(() => this.Animator.Play('left'))
