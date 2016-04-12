@@ -23,13 +23,7 @@ namespace game {
         constructor(x: number, y: number, width: number, height: number)
         {
             super(x, y, width, height);
-            this.Timer.Delay(0, this.Start, this);
         }
-        
-        /**
-         * Called once before first update.
-         */
-        abstract Start(): void;
         
         Update(timeDelta: number): void
         {
@@ -49,6 +43,8 @@ namespace game {
         {
             super.Update(timeDelta);
             this.Sprite.Update(timeDelta);
+            // forbid subpixel movement
+            this.Sprite.Position.Set(this.Sprite.Position.x | 0, this.Sprite.Position.y | 0);
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void

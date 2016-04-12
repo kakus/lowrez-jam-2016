@@ -26,6 +26,27 @@ namespace core {
 	{
 		return array[array.length - 1];
 	}
+    
+    export function Clone<T>(array: Array<T>): Array<T>
+    {
+        return array.slice(0);
+    }
+    
+    /**
+     * @return new array, with elements shuffled.
+     */
+    export function ShuffleArray<T>(array: Array<T>): Array<T> 
+    {
+        array = Clone(array);
+        
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
 	
 	// export function Brightness(base: string, brightess: number): string
 	// {

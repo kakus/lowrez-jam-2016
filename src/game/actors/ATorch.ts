@@ -11,9 +11,6 @@ namespace game {
             a.Loop = true;
             this.Animator.Play('idle');
         }
-        
-        Start(): void
-        {
-        }
+
     }
 }

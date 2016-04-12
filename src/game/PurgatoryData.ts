@@ -5,7 +5,11 @@ namespace game.data {
         const _ = 1; // ground tile
         const t = 2; // torch
         const h = 3; // hero
-
+        
+        const r = 4; // red demon or item, blue demon or item
+        const g = 5; // green demon or item, purple demon or item 
+        const f = 6; // final demon 
+        
         export const ground: number[][] = [
             [0, 0, 0, 0, _, 0, 0, 0, 0],
             [0, 0, 0, 0, _, 0, 0, 0, 0],
@@ -33,14 +37,14 @@ namespace game.data {
         // ];
         
         export const actors: number[][] = [
+            [0, 0, 0, t, f, t, 0, 0, 0],
             [0, 0, 0, t, 0, t, 0, 0, 0],
             [0, 0, 0, t, 0, t, 0, 0, 0],
-            [0, 0, 0, t, 0, t, 0, 0, 0],
-            [0, 0, 0, t, 0, t, 0, 0, 0],
+            [g, 0, g, t, 0, t, g, 0, g],
             [0, 0, 0, t, 0, t, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [r, 0, r, 0, 0, 0, r, 0, r],
             [0, t, 0, 0, 0, 0, 0, t, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, t, 0, 0, 0, 0],

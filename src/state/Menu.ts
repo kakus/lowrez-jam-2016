@@ -39,7 +39,7 @@ namespace state {
 				this.Tweens.New(l.Scale)
 					.Delay(i * 0.5)
 					.Then()
-					.To({x: 1, y: 1}, 0.5, core.easing.OutCubic)
+					.To({x: 1, y: 1}, 0.5, core.easing.CubicOut)
 					.Parallel(l, (t) => t.To({Alpha: 1}))
 					.Start();
 				

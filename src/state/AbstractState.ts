@@ -24,7 +24,7 @@ namespace state {
 			this.Stage = new core.Layer(0, 0, this.DefaultSize.x, this.DefaultSize.y);
 			this.Tweens = new core.TweenManager();
 			this.Timers = new core.TimersManager();
-			this.FPSMeter = new core.FPSMeter(2 * 60);
+			this.FPSMeter = new core.FPSMeter(60);
 			this.FPSText = new gfx.AAText(10, 10, 'FPS');
 			this.FPSText.SetSize(10);
 			

@@ -1,0 +1,104 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimal-ui">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<style>
+			html, body {
+				margin: 0;
+				padding: 0;
+				width:  100%;
+  				height: 100%;
+				background: #444;
+				text-align: center;
+			}
+			#gameframe {
+                width: 100%;
+                height: calc(100% - 100px);
+                border: none;
+            }
+            
+            .button {
+                display: inline-block;
+                margin: 10;
+                padding: 25px 0px 25px 0px;
+                width: 25%;
+                background-color: rgba(0, 0, 0, 0.5);
+                color: #aaa;
+                /*vertical-align: middle;*/
+                /*text-shadow: 0px  -2px 0px rgba(255,255,255,.5);*/
+                
+                -webkit-box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.3);
+                -moz-box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.3);
+                box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.3);
+                
+                /*-webkit-transition: all .05s ease-in-out;
+                -moz-transition: all .1s ease-in-out;
+                transition: all .1s ease-in-out;*/
+                
+                
+                -webkit-touch-callout: none; /* iOS Safari */
+                -webkit-user-select: none;   /* Chrome/Safari/Opera */
+                -khtml-user-select: none;    /* Konqueror */
+                -moz-user-select: none;      /* Firefox */
+                -ms-user-select: none;       /* IE/Edge */
+                user-select: none;           /* non-prefixed version, currently */
+            }
+            
+            .button:active {
+                -webkit-transform: translate(0, 4px);
+                -moz-transform: translate(0, 4px);
+                transform: translate(0, 4px);
+                -webkit-box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
+                -moz-box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
+                box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
+            }
+            
+		</style>
+	</head>
+	<body onload="OnLoad()">
+		<iframe id="gameframe" src="index.html"></iframe>
+        <div id="controlls">
+            <a class="button" id="left-btn">◀</a>
+            <a class="button" id="right-btn">▶</a>
+            <a class="button" id="up-btn">▲</a>
+        </div>
+	</body>
+    
+    <script type="text/javascript">
+        function OnLoad() {
+            
+            var iframe = document.getElementById('gameframe').contentWindow,
+                game = iframe.game;
+                
+            iframe.document.body.style['background-color'] = 'black';
+            
+            var buttons = {
+                // map button id to keyCode
+                'left-btn': 37,
+                'right-btn': 39,
+                'up-btn': 38 
+            };
+            
+            for (var id in buttons) 
+            {
+                (function(id) {
+                    var btn = document.getElementById(id);
+                    
+                    btn.addEventListener('touchstart', function (e) {
+                        game.context.PlayState.OnKeyDown(buttons[id]);
+                    });
+                    btn.addEventListener('mousedown', function (e) {
+                        game.context.PlayState.OnKeyDown(buttons[id]);
+                    });
+                    btn.addEventListener('touchend', function (e) {
+                        game.context.PlayState.OnKeyUp(buttons[id]);
+                    });
+                    btn.addEventListener('mouseup', function (e) {
+                        game.context.PlayState.OnKeyUp(buttons[id]);
+                    });
+                })(id);
+            }
+        };
+    </script>
+</html>

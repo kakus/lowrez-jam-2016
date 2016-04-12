@@ -3,6 +3,8 @@
 /// <reference path="../Context.ts" />
 /// <reference path="../../gfx/Rectangle.ts" />
 /// <reference path="../../audio/AudioManager.ts" />
+/// <reference path="../../core/Random.ts" />
+
 
 
 namespace game {
@@ -27,12 +29,7 @@ namespace game {
             this.Animator.AddAnimation('idle', [assets.FLOATING_TILE_FRAMES[0]], sheet);
             this.Animator.Play('idle');
             
-            this.SetupDustParticles(sheet);
-        }
-        
-        Start(): void
-        {
-            
+            this.SetupDustParticles();
         }
         
         Collapse(): void
@@ -57,7 +54,7 @@ namespace game {
                 .To({y: pos.y}, 0.01)
                 .Start();
                 
-            this.ShowParticles();
+            this.EmitParticles();
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void
@@ -66,7 +63,7 @@ namespace game {
             this.DustPartices.Draw(ctx);
         }
         
-        private ShowParticles(): void
+        private EmitParticles(): void
         {
             this.DustPartices.Visible = true;
             this.DustPartices.Children.forEach(dust => {
@@ -99,7 +96,7 @@ namespace game {
             });
         }
         
-        private SetupDustParticles(sheet: gfx.SpriteSheet): void
+        private SetupDustParticles(): void
         {
             this.DustPartices = new core.Layer<gfx.Rectangle>();
             this.DustPartices.Alpha = 0.2;

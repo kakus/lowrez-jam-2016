@@ -114,18 +114,24 @@ namespace state {
         OnResize(): void
         {
             super.OnResize();
+            audio.manager.Volume = 0;
             this.Game.Context['imageSmoothingEnabled'] = false;
+            this.Game.Context['mozImageSmoothingEnabled'] = false;
+            this.Game.Context['webkitImageSmoothingEnabled'] = false;
+            this.Game.Context['msImageSmoothingEnabled'] = false;
         }
         
         RestartPurgatory(): void
         {
             if (this.Purgatory) this.Purgatory.RemoveFromParent();
             
+            this.Stage.Alpha = 1;
+            this.DimScreen(true);
             this.Purgatory = new game.Purgatory(0.5, 0.5);
             this.Stage.AddChild(this.Purgatory);
         }
         
-        ShakeScreen(time: number, amplitude: number = 7): core.Tween
+        ShakeScreen(time: number, amplitude: number = 5): core.Tween
         {
             return this.Tweens.New(this.Stage.Position)
                 .OnUpdate((position, progress) =>{
@@ -142,15 +148,48 @@ namespace state {
                 .Start();
         }
         
+        BlinkScreen(time: number = 1, rate: number = 0.05): void
+        {
+            let rect = new gfx.Rectangle(0, 0, this.Stage.Size.x, this.Stage.Size.y, {
+                fillStyle: 'white', compositeOperation: 'difference'
+            });
+            this.Stage.AddChild(rect);
+            
+            const callLimit = (time/rate) | 0;
+            
+            this.Timers.Repeat(rate, (count) => {
+                
+                if (count == callLimit) 
+                    rect.RemoveFromParent();
+                else 
+                    rect.Visible = !rect.Visible;
+                    
+            }, undefined, callLimit);            
+        }
+        
+        DimScreen(reverse = false, time = 2): core.Tween
+        {
+            if (reverse) {
+                this.Stage.Alpha = 1 - this.Stage.Alpha;
+            }
+            return this.Tweens.New(this.Stage)
+                .To({Alpha: reverse ? 1 : 0}, time)
+                .Start();
+        }
+        
         UpdateCamera(): void
         {
             // center camera on player
             core.vector.Subtract(this.ScreenCenter, this.Purgatory.Player.Position, this.Purgatory.Position);
+            
             // pan camera to map boundary
-            core.vector.Min(new core.Vector(0, 0), this.Purgatory.Position, this.Purgatory.Position);
-            let max = new core.Vector();
-            core.vector.Subtract(this.DefaultSize, this.Purgatory.Size, max);
-            core.vector.Max(max, this.Purgatory.Position, this.Purgatory.Position);
+            //
+            // TURNED OFF - can be removed after solving problem of seeing two paths (demon and item).
+            //
+            // core.vector.Min(new core.Vector(0, 0), this.Purgatory.Position, this.Purgatory.Position);
+            // let max = new core.Vector();
+            // core.vector.Subtract(this.DefaultSize, this.Purgatory.Size, max);
+            // core.vector.Max(max, this.Purgatory.Position, this.Purgatory.Position);
         }
 
     }
