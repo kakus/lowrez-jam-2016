@@ -24,6 +24,8 @@ namespace state {
         
         ScreenCenter: core.Vector;
         
+        CameraTweens: core.TweenManager;
+        
         /**
 		 * Called once before first update
 		 */
@@ -32,6 +34,7 @@ namespace state {
             // simple key handing mechanism, this is not part of this framework
             // its quick fix for this demo.
             this.IsKeyDown = [];
+            this.CameraTweens = new core.TweenManager();
             // set game size befor Start, this is important since is sets
             // native game resolution. OnResize doesn't change game resolution, it
             // only scales the game.
@@ -89,6 +92,7 @@ namespace state {
         Update(timeDelta: number): void 
         {
             super.Update(timeDelta);
+            this.CameraTweens.Update(timeDelta);
             
             if (this.IsKeyDown[core.key.LEFT])
                 this.Purgatory.MovePlayer(game.MoveDirection.LEFT);
@@ -99,7 +103,10 @@ namespace state {
                 
             if (this.Purgatory) {
                 this.Purgatory.Update(timeDelta);
-                this.UpdateCamera();
+                
+                if (!this.CameraTweens.TweenPlaying()) {
+                    this.CenterCamera();
+                }
             }
         }
         
@@ -169,9 +176,19 @@ namespace state {
                 .Start();
         }
         
-        UpdateCamera(): void
+        MoveCameraTo(target: core.Vector, duration = 1): core.Tween
         {
-            // center camera on player
+            target = target.Clone();
+            core.vector.Subtract(this.ScreenCenter, target, target);
+            
+            return this.CameraTweens.New(this.Purgatory.Position)
+                .To({x: target.x, y: target.y}, duration, core.easing.SinusoidalInOut)
+                .Start();
+        }
+        
+        CenterCamera(): void
+        {
+            // center camera on target
             core.vector.Subtract(this.ScreenCenter, this.Purgatory.Player.Position, this.Purgatory.Position);
             
             // pan camera to map boundary

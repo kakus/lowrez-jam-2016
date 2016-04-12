@@ -62,7 +62,7 @@ namespace game {
                 .Start();
         }
         
-        FallFromHeaven(): void
+        FallFromHeaven(): core.Tween
         {
             let top = this.ToLocal(new core.Vector(GAME.Canvas.width/2, 0));
             this.Sprite.Position.Set(top.x - 12, top.y - 24);
@@ -71,7 +71,7 @@ namespace game {
             this.Animator.Play('falling');
             this.Alpha = 1;
             
-            this.Tween.New(this.Sprite.Position)
+            return this.Tween.New(this.Sprite.Position)
                 .To({x: 0, y: 0}, 1, core.easing.CubicIn)
                 .WhenDone(() => {
                     context.PlayState.ShakeScreen(0.5);

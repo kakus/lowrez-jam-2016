@@ -231,15 +231,13 @@ namespace game {
         
         private CanMoveTo(gridPos: core.Vector): boolean
         {
-            if (gridPos.y < 0 || gridPos.y > this.GroundLookup.length - 1)
-            {
+            if (gridPos.y < 0 || gridPos.y > this.GroundLookup.length - 1) {
                 return false;
             }
             
             let tile = this.GroundLookup[gridPos.y][gridPos.x];
             
-            if (tile)
-            {
+            if (tile) {
                 return tile.IsActive;
             }
             return false; 
@@ -258,7 +256,7 @@ namespace game {
                         case 1: tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId); break;
                         // tiles unlocked when all bosess are killed 
                         case 11:
-                            if (context.KilledDemons.length === 4) {
+                            if (context.IsOnlyBossAlive()) {
                                 tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId);                                
                             }
                             else {
@@ -292,7 +290,14 @@ namespace game {
                       case 2: actor = new ATorch(0, 0, this.SpriteSheet); break;
                       case 3: 
                         actor = this.Player = new AHero(0, 0, this.SpriteSheet);
-                        this.Timer.Delay(0.8, () => this.Player.FallFromHeaven());
+                        this.Timer.Delay(0.8, () => {
+                            let fall = this.Player.FallFromHeaven();
+                            if (context.IsOnlyBossAlive()) {
+                                fall.WhenDone(() => {
+                                    this.CameraShowPathToFinalBoss();
+                                })
+                            }
+                        });
                         break;
                       
                       case 4: 
@@ -321,6 +326,22 @@ namespace game {
             
             this.AddChild(this.GroundLayer);
             this.AddChild(this.ActorLayer);
+        }
+        
+        private CameraShowPathToFinalBoss(): void
+        {
+            let boss = this.Demons.filter(d => d.Name === 'Dark')[0];
+            this.Player.IsActive = false;
+            context.PlayState.MoveCameraTo(boss.Position, 10)
+                .WhenDone(() => {
+                    context.PlayState.DimScreen(false, 1);
+                })
+                .Then()
+                .Delay(1)
+                .WhenDone(() => {
+                    context.PlayState.DimScreen(true, 1);
+                    this.Player.IsActive = true;
+                });
         }
 
     }

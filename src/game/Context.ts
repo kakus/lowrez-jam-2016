@@ -8,7 +8,12 @@ namespace game {
         // ids of killed demons
         KilledDemons: string[] = [];
         // ids of picked up items
-        AquiredItems: string[] = [];    
+        AquiredItems: string[] = [];
+        
+        IsOnlyBossAlive(): boolean
+        {
+            return this.KilledDemons.length === 4;
+        }    
     }
     
     export const context = new Context();
