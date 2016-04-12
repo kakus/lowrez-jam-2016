@@ -10,6 +10,7 @@ namespace game {
         Player:    ACombatant;
         Teeth:     ATooth[] = [];
         ToothPool: ATooth[] = [];
+        HitZone:   boolean[][] = [];
 
         TileSet: gfx.SpriteSheet;
         ActorLayer = new core.Layer<Actor>();
@@ -49,17 +50,28 @@ namespace game {
             if (this.playerVelocity < -this.velocityCap)
                 this.playerVelocity = -this.velocityCap;
 
+            this.realPosition      += this.playerVelocity * dt;
+            this.Player.Position.y += this.playerVelocity;
+
             /* in the future, just lose the game/life here */
             if (this.Player.Position.y < 0)
                 this.Player.Position.y = 0;
 
-            if (this.Player.Position.y > 64)
-                this.Player.Position.y = 64;
-
-            this.realPosition      += this.playerVelocity * dt;
-            this.Player.Position.y += this.playerVelocity;
+            if (Math.floor(this.Player.Position.y) + this.Player.Size.y > 64) {
+                this.Player.Position.y = 64 - this.Player.Size.y;
+            }
 
             this.UpdateTeeth(dt);
+
+            var crashed = false;
+            this.ResetHitZone();
+            this.Player.FillHitZone(this.HitZone);
+            for (let tooth of this.Teeth) {
+                if (tooth.FillHitZone(this.HitZone)) {
+                    crashed = true;
+                    console.log("COLLISION");
+                }
+            }
         }
 
         UpdateTeeth(dt: number): void
@@ -90,7 +102,7 @@ namespace game {
 
         private SpawnPlayer(): void
         {
-            this.Player = new ACombatant(5, this.realPosition, this.TileSet);
+            this.Player = new ACombatant(0, this.realPosition, this.TileSet);
             this.ActorLayer.AddChild(this.Player);
         }
 
@@ -124,6 +136,16 @@ namespace game {
                 let tooth = new ATooth(x, y, 8, actualHeight);
                 this.Teeth.push(tooth);
                 this.ActorLayer.AddChild(tooth);
+            }
+        }
+
+        private ResetHitZone(): void
+        {
+            for (var i: number = 0; i < 64; i++) {
+                this.HitZone[i] = [];
+                for (var j: number = 0; j < 64; j++) {
+                    this.HitZone[i][j] = false;
+                }
             }
         }
     }
