@@ -257,7 +257,8 @@ namespace game {
                         // tiles unlocked when all bosess are killed 
                         case 11:
                             if (context.IsOnlyBossAlive()) {
-                                tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId);                                
+                                tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId);
+                                tile.RaiseWhenVisible();                                
                             }
                             else {
                                 return;

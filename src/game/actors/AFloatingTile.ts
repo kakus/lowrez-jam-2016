@@ -26,6 +26,7 @@ namespace game {
              
              
             this.Animator.AddAnimation('collapse', assets.FLOATING_TILE_FRAMES, sheet);
+            this.Animator.AddAnimation('raise', assets.FLOATING_TILE_FRAMES.slice(0).reverse(), sheet);
             this.Animator.AddAnimation('idle', [assets.FLOATING_TILE_FRAMES[0]], sheet);
             this.Animator.Play('idle');
             
@@ -55,6 +56,35 @@ namespace game {
                 .Start();
                 
             this.EmitParticles();
+        }
+        
+        Raise(): void
+        {
+            let pos = this.Sprite.Position;
+            pos.y += 15;
+            
+            this.Animator.Play('raise');
+            
+            this.Tween.New(pos)
+                .To({y: pos.y - 15}, COLLAPSE_TIME)
+                .OnUpdate(() => pos.Set(pos.x | 0, pos.y | 0))
+                .Parallel(this.Sprite, t => t
+                    .To({Alpha: 1}, COLLAPSE_TIME))
+                .Start()
+                .WhenDone(() => this.Animator.Play('idle'));
+        }
+        
+        RaiseWhenVisible(): void
+        {
+            this.Visible = false;
+            this.Sprite.Alpha = 0;
+            
+            let timer = this.Timer.Repeat(0, () => {
+                if (this.Visible) {
+                    this.Raise();
+                    timer.Stop();
+                }
+            })
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void
