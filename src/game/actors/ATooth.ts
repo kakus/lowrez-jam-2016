@@ -41,10 +41,67 @@ namespace game {
                 }
             }
         }
+        
+        GetBottomRight(out = new core.Vector()): core.Vector
+        {
+            vec.Add(this.Position, this.Size, out);
+            return out;
+        }
     }
     
-    
     export namespace tooth {
+        
+        const TMP1 = new core.Vector();
+        const TMP2 = new core.Vector();
+        
+        export function PixelPerfectCollision(a: ATooth, b: ATooth): boolean
+        {
+            // So the a is always the samller object.
+            if (a.Size.x * a.Size.y > b.Size.x * b.Size.y)
+            {
+                let t = a;
+                a = b;
+                a = t;
+            }
+            
+            let delta = TMP1;
+            vec.Subtract(a.Position, b.Position, delta);
+            
+            for (let y = 0; y < a.Size.y; ++y)
+            {
+                for (let x = 0; x < a.Size.x; ++x)
+                {
+                    if (b.Pixels[y + delta.y]) 
+                    {
+                        let bPixel = b.Pixels[y + delta.y][x + delta.x];
+                        
+                        if (bPixel != undefined && a.Pixels[y][x] != 0 && bPixel != 0) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            
+            return false;
+        }
+        
+        export function Collide(a: ATooth, b: ATooth): boolean
+        {
+            let a_br = a.GetBottomRight(TMP1),
+                a_tl = a.Position;
+            
+            let b_br = b.GetBottomRight(TMP2),
+                b_tl = b.Position;
+                
+                
+            if (a_tl.x > b_br.x || a_br.x < b_tl.x ||
+                a_tl.y > b_br.y || a_br.y < b_tl.y) {
+                return false;
+            }
+            else {
+                return PixelPerfectCollision(a, b);
+            }
+        }
         
         export const player = [
             [0, 0, 0, 1],

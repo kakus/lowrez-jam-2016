@@ -16,6 +16,7 @@ namespace game {
         Player = new ATooth(5, 0, tooth.player);
         PlayerVelocity = new core.Vector(0, 0);
         Gravity = new core.Vector(0, 60);
+        Marker = new gfx.Rectangle(0, 0, 4, 4, {fillStyle: "rgba(255, 0, 0, 0.5)"});
         
         CanFlap = true;
         
@@ -30,12 +31,21 @@ namespace game {
             
             // this.Player.EnableSubpixelMovement = true;
             this.Mouth.AddChild(this.Teeth);
-            this.Mouth.AddChild(this.Player);
+            this.Mouth.AddChild(this.Player, this.Marker);
             
         }
         
         Update(timeDelta: number): void
         {
+            this.Player.Position.Clone(this.Marker.Position);
+            this.Marker.Visible = false;
+            for (let tooth of this.Teeth.Children)
+            {
+                if (game.tooth.Collide(this.Player, tooth)) {
+                    this.Marker.Visible = true;
+                }
+            }
+            
             let delta = new core.Vector();
             vec.Scale(this.TeethVelocity, timeDelta, delta);
             
