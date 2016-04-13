@@ -12,12 +12,14 @@ namespace game {
     export abstract class Actor extends core.DisplayObject
     {
         /** this is just marker */
-        public IsActive: boolean = true;
+        IsActive: boolean = true;
         
-        public GridPosition = new core.Vector();
+        GridPosition = new core.Vector();
         
-        public Timer = new core.TimersManager();
-        public Tween = new core.TweenManager();
+        Timer = new core.TimersManager();
+        Tween = new core.TweenManager();
+        
+        EnableSubpixelMovement = false;
         
         
         constructor(x: number, y: number, width: number, height: number)
@@ -30,7 +32,9 @@ namespace game {
             this.Timer.Update(timeDelta);
             this.Tween.Update(timeDelta);
             // Forbids subpixel movements
-            this.Position.Set(this.Position.x | 0, this.Position.y | 0);
+            if (!this.EnableSubpixelMovement) {
+                this.Position.Set(Math.floor(this.Position.x), Math.floor(this.Position.y));
+            }
         }
     }
     
@@ -44,7 +48,7 @@ namespace game {
             super.Update(timeDelta);
             this.Sprite.Update(timeDelta);
             // forbid subpixel movement
-            this.Sprite.Position.Set(this.Sprite.Position.x | 0, this.Sprite.Position.y | 0);
+            this.Sprite.Position.Set(Math.floor(this.Position.x), Math.floor(this.Position.y));
         }
         
         protected DrawSelf(ctx: CanvasRenderingContext2D): void
