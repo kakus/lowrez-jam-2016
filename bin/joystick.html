@@ -87,15 +87,19 @@
                     
                     btn.addEventListener('touchstart', function (e) {
                         game.context.PlayState.OnKeyDown(buttons[id]);
+                        e.preventDefault();
                     });
                     btn.addEventListener('mousedown', function (e) {
                         game.context.PlayState.OnKeyDown(buttons[id]);
+                        e.preventDefault();
                     });
                     btn.addEventListener('touchend', function (e) {
                         game.context.PlayState.OnKeyUp(buttons[id]);
+                        e.preventDefault();
                     });
                     btn.addEventListener('mouseup', function (e) {
                         game.context.PlayState.OnKeyUp(buttons[id]);
+                        e.preventDefault();
                     });
                 })(id);
             }
