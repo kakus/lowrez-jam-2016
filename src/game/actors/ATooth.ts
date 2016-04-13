@@ -47,6 +47,20 @@ namespace game {
             vec.Add(this.Position, this.Size, out);
             return out;
         }
+        
+        Blink(time = 1, rate = 0.05): void
+        {
+            const ticks = (time / rate) | 0;
+            
+            this.Timer.Repeat(rate, (n) => {
+                if (n == ticks) {
+                    this.Visible = true;
+                }
+                else {
+                    this.Visible = ! this.Visible;
+                }
+            }, undefined, ticks)
+        }
     }
     
     export namespace tooth {
@@ -69,9 +83,9 @@ namespace game {
             
             for (let y = 0; y < a.Size.y; ++y)
             {
-                for (let x = 0; x < a.Size.x; ++x)
+                if (b.Pixels[y + delta.y]) 
                 {
-                    if (b.Pixels[y + delta.y]) 
+                    for (let x = 0; x < a.Size.x; ++x)
                     {
                         let bPixel = b.Pixels[y + delta.y][x + delta.x];
                         
