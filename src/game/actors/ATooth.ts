@@ -20,6 +20,7 @@ namespace game {
             core.Assert(Pixels.length > 0, "Pixels can't be null.");
             
             this.Position.Clone(this.FloatPosition);
+            this.Size.Set(Pixels[0].length, Pixels.length);
             
             this.Timer.Repeat(0, () => this.FloatPosition.Clone(this.Position));
             // this.Anchor.Set(0.5, 0.5);

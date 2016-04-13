@@ -47,7 +47,8 @@ namespace state {
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
                 // this.RestartPurgatory();
-                this.FightMode = new game.FightMode(0, 0);
+                this.FightMode = new game.FightMode(0, 0, 
+                    new game.TeethGenertor(game.theeth.demon1.upper, game.theeth.demon1.lower, game.theeth.demon1.gap));
                 this.Stage.AddChild(this.FightMode);
             });
 
@@ -62,9 +63,7 @@ namespace state {
 
             // setup fps metter
             this.ShowFps();
-            this.FPSText.Position.Set(1, 1);
-            this.FPSText.SetSize(3);
-            this.FPSText.Alpha = 0.5;
+            this.FPSText.Position.Set(0, 0);
             
             // fit window
             this.OnResize();

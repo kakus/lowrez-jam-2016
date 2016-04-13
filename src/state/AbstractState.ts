@@ -36,7 +36,7 @@ namespace state {
 			this.Timers.Update(timeDelta);
 			this.Tweens.Update(timeDelta);
 			
-			if (this.FPSText.Parent)
+			if (this.FPSText.Visible)
 			{
 				this.FPSMeter.Update(timeDelta);
 				this.FPSText.SetText(this.FPSMeter.GetFPS().toFixed(1));
@@ -47,6 +47,7 @@ namespace state {
 		{
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 			this.Stage.Draw(ctx);
+            this.FPSText.Draw(ctx);
 		}
 		
 		OnPointerDown(point: core.Vector): void
@@ -102,7 +103,7 @@ namespace state {
 		
 		ShowFps(): void
 		{
-			this.Stage.AddChild(this.FPSText);
+            this.FPSText.Visible = true;
 		}
 		
 		protected ListenForMouseInput(): void
