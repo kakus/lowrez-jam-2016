@@ -5,7 +5,6 @@
 /// <reference path="../game/FightMode.ts" />
 
 
-
 namespace state {
     
     const PLAYER_SPEED = 20;
