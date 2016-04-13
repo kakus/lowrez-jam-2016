@@ -29,11 +29,13 @@ namespace game {
         DARK_DEMON_FRAMES: [29, 30],
         
         // gui of fight scene
+        // just position on 24x24 grid, size is different.
+        FIGHT_DEMON_HEALTHBAR: 81,
         
         FIGHT_DEMON_MOUTH: {
             // index in 24x24 grid of top left pixel of image 64x64
             // size is manually changed.
-            RED: 91
+            RED: [91, 94]
         }
     }
     

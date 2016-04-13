@@ -13,12 +13,12 @@ namespace gfx {
         
         constructor(
             public ImageId: string,
-            public CellSize: core.IVector,
+            public CellSize: core.Vector,
             /**
              * This offset will be just used for sprite extraction. It won't be counted
              * in any sanity checks.
              */
-            public Offset: core.IVector = new core.Vector()
+            public Offset: core.Vector = new core.Vector()
         ) {
             let tileset = Sprite.ImageCache[ImageId]
              

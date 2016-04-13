@@ -1,5 +1,6 @@
 /// <reference path="../core/DisplayObject.ts" />
 /// <reference path="actors/ATooth.ts" />
+/// <reference path="actors/ADemonFace.ts" />
 /// <reference path="../core/Color.ts" />
 /// <reference path="../core/ObservableProperty.ts" />
 /// <reference path="TeethGenerator.ts" />
@@ -8,7 +9,7 @@
 
 namespace game {
     
-    const FLIP_POWER = 30;
+    const FLIP_POWER = 40;
     const QUANTIZE_POS = (pos: core.Vector) => pos.Set(Math.floor(pos.x), Math.floor(pos.y));
     
     export class FightMode extends core.DisplayObject
@@ -23,34 +24,35 @@ namespace game {
         
         Player = new ATooth(5, 0, tooth.player);
         PlayerVelocity = new core.Vector(0, 0);
-        PlayerHealthBar = new HealthBar(6, 1, 20, 5, "H", new core.RgbColor(255, 0, 0, 0.5));
+        // PlayerHealthBar = new HealthBar(6, 1, 20, 5, "H", new core.RgbColor(255, 0, 0, 0.5));
         CanFlap = true;
-        Gravity = new core.Vector(0, 60);
+        Gravity = new core.Vector(0, 80);
         
-        DemonFace: gfx.Sprite;
-        DemonHealthBar = new HealthBar(38, 1, 20, 5, "D", new core.RgbColor(0, 0, 255, 0.5), true);
+        DemonFace: ADemonFace;
+        DemonHealthBarBg: gfx.Sprite;
+        DemonHealthBar = new HealthBar(5, 2, 54, 2, new core.RgbColor(174, 50, 50, 1));
         
         Marker = new gfx.Rectangle(0, 0, 4, 4, {fillStyle: "rgba(255, 0, 0, 0.5)"});
         
         Timers = new core.TimersManager();
+        Tween = new core.TweenManager();
         BloodTween = new core.TweenManager();
         BloodParticles = new core.Layer<gfx.Rectangle>();
-        
         
         constructor(x: number, y: number, generator: TeethGenertor)
         {
             super(x, y, 64, 64);
             
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
-            this.DemonFace = ss.GetSprite(assets.FIGHT_DEMON_MOUTH.RED);
-            this.DemonFace.SourceRect.Size.Set(64, 64);
-            this.DemonFace.Size.Set(64, 64);
+            this.DemonFace = new ADemonFace(0, 0, assets.FIGHT_DEMON_MOUTH.RED, ss);
+            this.DemonHealthBarBg = ss.GetSprite(assets.FIGHT_DEMON_HEALTHBAR);
+            this.DemonHealthBarBg.SourceRect.Size.Set(64, 7);
+            this.DemonHealthBarBg.Size.Set(64, 7);
             
             // this.Player.EnableSubpixelMovement = true;
             generator
                 .SpawnAll(new core.Vector(this.Size.x/2, 0), new core.Vector(this.Size.x/2, 45))
                 .forEach(tooth => {
-                    console.log("new tooth at " + tooth.Position)
                     tooth.Visible = tooth.Position.x < this.Mouth.Size.x + 10;
                     this.Teeth.AddChild(tooth);
                 });
@@ -58,7 +60,8 @@ namespace game {
             this.ToothRestartX = generator.LastX;
             
             this.Mouth.AddChild(this.Teeth, this.Player, this.Marker, this.BloodParticles);
-            this.Face.AddChild(this.PlayerHealthBar, this.DemonHealthBar);
+            this.Face.AddChild(this.DemonFace, this.DemonHealthBarBg, this.DemonHealthBar);
+            
             this.SetupBloodParticles(20);
             
             this.DemonHealthBar.Progress.OnChange.Add(value => {
@@ -76,6 +79,8 @@ namespace game {
             
             this.Timers.Update(timeDelta);
             this.BloodTween.Update(timeDelta);
+            this.Tween.Update(timeDelta);
+            this.DemonFace.Update(timeDelta);
             
             let thereWasCollision = this.CheckCollision();
             this.IntegrateVelocity(timeDelta);
@@ -99,7 +104,6 @@ namespace game {
             // this.Area.Draw(ctx);
             this.Mouth.Draw(ctx);
             this.Face.Draw(ctx);
-            this.DemonFace.Draw(ctx);
         }
         
         Flap(): void
@@ -123,9 +127,14 @@ namespace game {
         {
             console.log('demon take damaage');
             
-            this.DemonHealthBar.Progress.Increment(-0.1);
-            this.PlayerVelocity.y = FLIP_POWER * (upperLip ? 0.25 : -1);
-            // context.PlayState.ShakeScreen(0.5);
+            this.DemonHealthBar.Progress.Increment(-0.05);
+            this.DemonFace.Hurt();
+            
+            this.PlayerVelocity.y = FLIP_POWER * (upperLip ? 0.45 : -1);
+            context.PlayState.ShakeScreen(0.3, 3);
+            
+            let t = this.Timers.Repeat(0, () => this.CanFlap = false, undefined)
+            this.Timers.Delay(0.2, () => t.Stop());
             
             let blood = new core.Vector();
             if (upperLip) {
@@ -140,8 +149,28 @@ namespace game {
         
         private PlayerTakeDamage(): void
         {
-            console.log('player take damage');
-            this.PlayerHealthBar.Progress.Increment(-0.1);
+            this.TeethVelocity.Set(0, 0);
+            
+            const delay = 2;
+            const fade = 2;
+            
+            this.Tween.New(this.Mouth)
+                .Delay(delay)
+                .Then()
+                .To({Alpha: 0}, fade * 0.75)
+                .Start();
+                
+            this.Tween.New(this.Face)
+                .Delay(delay)
+                .Then()
+                .To({Alpha: 0}, fade)
+                .Start()
+                .WhenDone(() => {
+                    GAME.Play('you-died');
+                });
+                
+                
+            // this.PlayerHealthBar.Progress.Increment(-0.1);
             
         }
         
@@ -238,23 +267,17 @@ namespace game {
     
     class HealthBar extends core.DisplayObject
     {
-        Background: gfx.Rectangle;
+        // Background: gfx.Rectangle;
         Fill: gfx.Rectangle;
-        Label: gfx.AAText;
         Progress = new core.ObservableNumber(1);
         
-        constructor(x: number, y: number, width: number, height: number, label: string, color: core.RgbColor, labelRightSide = false)
+        constructor(x: number, y: number, width: number, height: number, color: core.RgbColor)
         {
             super(x, y, width, height);
             
-            this.Fill = new gfx.Rectangle(1, 1, width - 2, height - 2, {fillStyle: color.toString()});
-            color.a /= 2;
-            this.Background = new gfx.Rectangle(0, 0, width, height, {fillStyle: color.toString()});
-            this.Label = new gfx.AAText(-5, 0, label);
-            if (labelRightSide) {
-                this.Label.Position.x = width + 2;
-            }
-            this.Label.SetSize(5);
+            this.Fill = new gfx.Rectangle(0, 0, width, height, {fillStyle: color.toString()});
+            // color.a /= 2;
+            // this.Background = new gfx.Rectangle(0, 0, width, height, {fillStyle: color.toString()});
             
             this.Progress.OnChange.Add(value => {
                 value = core.math.Clamp(value, 0, 1);
@@ -264,8 +287,7 @@ namespace game {
         
         DrawSelf(ctx: CanvasRenderingContext2D): void
         {
-            this.Label.Draw(ctx);
-            this.Background.Draw(ctx);
+            // this.Background.Draw(ctx);
             this.Fill.Draw(ctx);
         }
     }
