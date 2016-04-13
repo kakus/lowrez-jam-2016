@@ -147,3 +147,6 @@ namespace core.vector {
 	}
 	
 }
+
+// global shortcut to vector;
+const vec = core.vector;
