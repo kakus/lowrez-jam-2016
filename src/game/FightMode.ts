@@ -9,12 +9,13 @@
 namespace game {
     
     const FLIP_POWER = 30;
+    const QUANTIZE_POS = (pos: core.Vector) => pos.Set(Math.floor(pos.x), Math.floor(pos.y));
     
     export class FightMode extends core.DisplayObject
     {
         Mouth = new core.Layer(5, 15, 54, 45);
         Face = new core.Layer(0, 0, 64, 64);
-        Area = new gfx.Rectangle(5, 15, 54, 45, {strokeStyle: 'red', lineWidth: 0.5});
+        // Area = new gfx.Rectangle(5, 15, 54, 45, {strokeStyle: 'red', lineWidth: 0.5});
         
         Teeth = new core.Layer<ATooth>();
         TeethVelocity = new core.Vector(-10, 0);
@@ -26,6 +27,7 @@ namespace game {
         CanFlap = true;
         Gravity = new core.Vector(0, 60);
         
+        DemonFace: gfx.Sprite;
         DemonHealthBar = new HealthBar(38, 1, 20, 5, "D", new core.RgbColor(0, 0, 255, 0.5), true);
         
         Marker = new gfx.Rectangle(0, 0, 4, 4, {fillStyle: "rgba(255, 0, 0, 0.5)"});
@@ -38,6 +40,11 @@ namespace game {
         constructor(x: number, y: number, generator: TeethGenertor)
         {
             super(x, y, 64, 64);
+            
+            let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
+            this.DemonFace = ss.GetSprite(assets.FIGHT_DEMON_MOUTH.RED);
+            this.DemonFace.SourceRect.Size.Set(64, 64);
+            this.DemonFace.Size.Set(64, 64);
             
             // this.Player.EnableSubpixelMovement = true;
             generator
@@ -52,7 +59,7 @@ namespace game {
             
             this.Mouth.AddChild(this.Teeth, this.Player, this.Marker, this.BloodParticles);
             this.Face.AddChild(this.PlayerHealthBar, this.DemonHealthBar);
-            // this.SetupBloodParticles(20);
+            this.SetupBloodParticles(20);
             
             this.DemonHealthBar.Progress.OnChange.Add(value => {
                 if (value <= 0) {
@@ -89,9 +96,10 @@ namespace game {
         
         DrawSelf(ctx: CanvasRenderingContext2D): void
         {
-            this.Area.Draw(ctx);
+            // this.Area.Draw(ctx);
             this.Mouth.Draw(ctx);
             this.Face.Draw(ctx);
+            this.DemonFace.Draw(ctx);
         }
         
         Flap(): void
@@ -117,16 +125,17 @@ namespace game {
             
             this.DemonHealthBar.Progress.Increment(-0.1);
             this.PlayerVelocity.y = FLIP_POWER * (upperLip ? 0.25 : -1);
+            // context.PlayState.ShakeScreen(0.5);
             
-            // let blood = new core.Vector();
-            // if (upperLip) {
-            //     blood = this.Player.Position;
-            // }
-            // else {
-            //     vec.Add(this.Player.Position, this.Player.Size, blood);
-            // }
+            let blood = new core.Vector();
+            if (upperLip) {
+                this.Player.Position.Clone(blood);
+            }
+            else {
+                vec.Add(this.Player.Position, this.Player.Size, blood);
+            }
             
-            // this.EmitBloodParicles(blood, upperLip);    
+            this.EmitBloodParicles(blood, upperLip);    
         }
         
         private PlayerTakeDamage(): void
@@ -210,7 +219,9 @@ namespace game {
                 
                 this.BloodTween.New(particle.Position)
                     .To({y: fromTop ? y : -y, x: core.Random(-5, 5)}, fall/2, core.easing.CubicOut)
+                    .OnUpdate(QUANTIZE_POS)
                     .Then()
+                    .OnUpdate(QUANTIZE_POS)
                     .To({y: 0}, fall/2, core.easing.CubicIn)
                     .Start();
             }
@@ -218,6 +229,7 @@ namespace game {
             let d = FALL_TIME * this.TeethVelocity.x * 1.5;
             this.BloodParticles.Position.Set(start.x, start.y);
             this.BloodTween.New(this.BloodParticles.Position)
+                .OnUpdate(QUANTIZE_POS)
                 .To({x: start.x + d}, FALL_TIME)
                 .Start();
         }

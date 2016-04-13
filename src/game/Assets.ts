@@ -27,6 +27,14 @@ namespace game {
         GREEN_DEMON_FRAMES: [25, 26],
         PURPLE_DEMON_FRAMES: [27, 28],
         DARK_DEMON_FRAMES: [29, 30],
+        
+        // gui of fight scene
+        
+        FIGHT_DEMON_MOUTH: {
+            // index in 24x24 grid of top left pixel of image 64x64
+            // size is manually changed.
+            RED: 91
+        }
     }
     
 }
