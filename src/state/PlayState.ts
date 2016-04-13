@@ -2,6 +2,8 @@
 /// <reference path="../gfx/Text.ts" />
 /// <reference path="../game/Purgatory.ts" />
 /// <reference path="../game/Context.ts" />
+/// <reference path="../game/FightMode.ts" />
+
 
 
 namespace state {
@@ -10,17 +12,10 @@ namespace state {
 
     export class PlayState extends AbstractState {
 
-        //
-        // Important note!
-        // Never init properties inline in State class, since state
-        // is usually created just once per game.
-        // Init properties in Start method. 
-        //
-        
-        Score: gfx.AAText;
-        
         IsKeyDown: boolean[];
+        
         Purgatory: game.Purgatory;
+        FightMode: game.FightMode;
         
         ScreenCenter: core.Vector;
         
@@ -51,7 +46,9 @@ namespace state {
             gfx.Sprite.Load(
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
-                this.RestartPurgatory();
+                // this.RestartPurgatory();
+                this.FightMode = new game.FightMode(0, 0);
+                this.Stage.AddChild(this.FightMode);
             });
 
             // setup controlls
@@ -94,14 +91,28 @@ namespace state {
             super.Update(timeDelta);
             this.CameraTweens.Update(timeDelta);
             
-            if (this.IsKeyDown[core.key.LEFT])
-                this.Purgatory.MovePlayer(game.MoveDirection.LEFT);
-            else if (this.IsKeyDown[core.key.UP])
-                this.Purgatory.MovePlayer(game.MoveDirection.UP);
-            else if (this.IsKeyDown[core.key.RIGHT])
-                this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
-                
-            if (this.Purgatory) {
+            if (this.FightMode)
+            {
+                if (this.IsKeyDown[core.key.UP]) {
+                    this.FightMode.Flap();
+                }
+                else {
+                    this.FightMode.Flip();
+                }
+                    
+                    
+                this.FightMode.Update(timeDelta);
+            }
+            
+            if (this.Purgatory) 
+            {
+                if (this.IsKeyDown[core.key.LEFT])
+                    this.Purgatory.MovePlayer(game.MoveDirection.LEFT);
+                else if (this.IsKeyDown[core.key.UP])
+                    this.Purgatory.MovePlayer(game.MoveDirection.UP);
+                else if (this.IsKeyDown[core.key.RIGHT])
+                    this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
+                    
                 this.Purgatory.Update(timeDelta);
                 
                 if (!this.CameraTweens.TweenPlaying()) {
