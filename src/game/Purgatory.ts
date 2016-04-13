@@ -159,13 +159,13 @@ namespace game {
                 if (demon.GridPosition.x == gridPos.x && demon.GridPosition.y == gridPos.y) 
                 {
                     this.Player.IsActive = false;
-                    context.KilledDemons.push(demon.Name);
+                    // context.KilledDemons.push(demon.Name);
 
                     context.PlayState.Timers.Delay(0.7, () => {
 
                         context.PlayState.BlinkScreen(1);
                         context.PlayState.ShakeScreen(1).WhenDone(() => {
-                            context.PlayState.RestartPurgatory();
+                            context.PlayState.BeginFigthMode(demon.Name);
                         });
 
                     });

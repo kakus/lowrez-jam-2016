@@ -22,7 +22,7 @@ namespace game {
         TeethVelocity = new core.Vector(-10, 0);
         ToothRestartX: number;
         
-        Player = new ATooth(5, 0, tooth.player);
+        Player = new ATooth(5, 20, tooth.player);
         PlayerVelocity = new core.Vector(0, 0);
         // PlayerHealthBar = new HealthBar(6, 1, 20, 5, "H", new core.RgbColor(255, 0, 0, 0.5));
         CanFlap = true;
@@ -34,6 +34,7 @@ namespace game {
         
         Marker = new gfx.Rectangle(0, 0, 4, 4, {fillStyle: "rgba(255, 0, 0, 0.5)"});
         
+        TimeScale = 1;
         Timers = new core.TimersManager();
         Tween = new core.TweenManager();
         BloodTween = new core.TweenManager();
@@ -71,11 +72,16 @@ namespace game {
                 if (value <= 0) {
                     console.log("you killed demon");
                 }
-            })
+            });
+            
+            this.TimeScale = 0;
+            context.PlayState.DimScreen(true, 2)
+                .WhenDone(() => this.TimeScale = 1);
         }
         
         Update(timeDelta: number): void
         {
+            timeDelta *= this.TimeScale;
             // Debug code
             this.Player.Position.Clone(this.Marker.Position);
             this.Marker.Visible = false;

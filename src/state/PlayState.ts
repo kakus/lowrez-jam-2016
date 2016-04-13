@@ -61,7 +61,7 @@ namespace state {
             this.ListenForKeyboard();
 
             // setup fps metter
-            this.ShowFps();
+            // this.ShowFps();
             this.FPSText.Position.Set(0, 0);
             
             // fit window
@@ -129,15 +129,15 @@ namespace state {
             this.Game.Context['msImageSmoothingEnabled'] = false;
         }
         
-        // BeginFigthMode(demonName: string): void
-        // {
-        //     let gen = new game.TeethGenertor(game.theeth.demon1.upper, game.theeth.demon1.lower, game.theeth.demon1.gap);
-        //     this.FightMode = new game.FightMode(0, 0, gen);
-        //     this.Stage.AddChild(this.FightMode);
+        BeginFigthMode(demonName: string): void
+        {
+            let gen = new game.TeethGenertor(game.theeth.demon1.upper, game.theeth.demon1.lower, game.theeth.demon1.gap);
+            this.FightMode = new game.FightMode(0, 0, gen);
+            this.Stage.AddChild(this.FightMode);
             
-        //     this.Purgatory.RemoveFromParent();
-        //     this.Purgatory = null;
-        // }
+            this.Purgatory.RemoveFromParent();
+            this.Purgatory = null;
+        }
         
         RestartPurgatory(): void
         {

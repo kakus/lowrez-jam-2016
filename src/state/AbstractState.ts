@@ -27,6 +27,7 @@ namespace state {
 			this.FPSMeter = new core.FPSMeter(60);
 			this.FPSText = new gfx.AAText(10, 10, 'FPS');
 			this.FPSText.SetSize(10);
+            this.FPSText.Visible = false;
 			
 			this.Game.AddDOMEventListener(window, 'resize', (e) => this.OnResize());
 		}
