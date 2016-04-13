@@ -39,6 +39,8 @@ namespace game {
         BloodTween = new core.TweenManager();
         BloodParticles = new core.Layer<gfx.Rectangle>();
         
+        
+        
         constructor(x: number, y: number, generator: TeethGenertor)
         {
             super(x, y, 64, 64);
@@ -63,6 +65,7 @@ namespace game {
             this.Face.AddChild(this.DemonFace, this.DemonHealthBarBg, this.DemonHealthBar);
             
             this.SetupBloodParticles(20);
+            this.BloodParticles.Visible = false;
             
             this.DemonHealthBar.Progress.OnChange.Add(value => {
                 if (value <= 0) {
@@ -108,7 +111,7 @@ namespace game {
         
         Flap(): void
         {
-            if (this.CanFlap)
+            if (this.CanFlap && this.Player.IsActive)
             {
                 this.PlayerVelocity.y = -FLIP_POWER;
                 this.CanFlap = false;
@@ -125,7 +128,7 @@ namespace game {
         
         private DemonTakeDamage(upperLip: boolean): void
         {
-            console.log('demon take damaage');
+            if (!this.Player.IsActive) return;
             
             this.DemonHealthBar.Progress.Increment(-0.05);
             this.DemonFace.Hurt();
@@ -149,6 +152,7 @@ namespace game {
         
         private PlayerTakeDamage(): void
         {
+            this.Player.IsActive = false;
             this.TeethVelocity.Set(0, 0);
             
             const delay = 2;
@@ -237,6 +241,7 @@ namespace game {
         private EmitBloodParicles(start: core.Vector, fromTop: boolean): void
         {
             this.BloodTween.StopAll(false);
+            this.BloodParticles.Visible = true;
             
             const FALL_TIME = 1;
             for (let particle of this.BloodParticles.Children)
@@ -260,7 +265,8 @@ namespace game {
             this.BloodTween.New(this.BloodParticles.Position)
                 .OnUpdate(QUANTIZE_POS)
                 .To({x: start.x + d}, FALL_TIME)
-                .Start();
+                .Start()
+                .WhenDone(() => this.BloodParticles.Visible = false);
         }
         
     }

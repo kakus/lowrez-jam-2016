@@ -68,8 +68,7 @@
     <script type="text/javascript">
         function OnLoad() {
             
-            var iframe = document.getElementById('gameframe').contentWindow,
-                game = iframe.game;
+            var iframe = document.getElementById('gameframe').contentWindow;
                 
             iframe.document.body.style['background-color'] = 'black';
             
@@ -86,19 +85,19 @@
                     var btn = document.getElementById(id);
                     
                     btn.addEventListener('touchstart', function (e) {
-                        game.context.PlayState.OnKeyDown(buttons[id]);
+                        iframe.GAME.ActiveState.OnKeyDown(buttons[id]);
                         e.preventDefault();
                     });
                     btn.addEventListener('mousedown', function (e) {
-                        game.context.PlayState.OnKeyDown(buttons[id]);
+                        iframe.GAME.ActiveState.OnKeyDown(buttons[id]);
                         e.preventDefault();
                     });
                     btn.addEventListener('touchend', function (e) {
-                        game.context.PlayState.OnKeyUp(buttons[id]);
+                        iframe.GAME.ActiveState.OnKeyUp(buttons[id]);
                         e.preventDefault();
                     });
                     btn.addEventListener('mouseup', function (e) {
-                        game.context.PlayState.OnKeyUp(buttons[id]);
+                        iframe.GAME.ActiveState.OnKeyUp(buttons[id]);
                         e.preventDefault();
                     });
                 })(id);
