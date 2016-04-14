@@ -14,7 +14,7 @@
 
 namespace game {
     
-    export enum MoveDirection {
+    export const enum MoveDirection {
         LEFT, RIGHT, UP
     }
     

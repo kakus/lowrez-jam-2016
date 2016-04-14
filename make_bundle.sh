@@ -14,20 +14,26 @@ fi
 
 echo -- Coping files from bin to $OUTDIR 
 mkdir bundle
-cp -rv bin/index.html bin/app.js bundle
+rsync -av --progress bin/ bundle \
+   --exclude local* \
+   --exclude lib \
+   --exclude .DS_Store
 
 echo -- Minifying app.js
 java -jar compiler.jar \
    --compilation_level ADVANCED\
    --language_out ECMASCRIPT5\
    --js_output_file $OUTDIR/app.min.js\
-   lib/jsfxr.js\
+   bin/lib/promise.js\
+   bin/lib/jsfxr.js\
    $OUTDIR/app.js
 
 echo -- Updating index.html so its load minified app
 sed -i "" s/app\.js/app.min.js/ $OUTDIR/index.html
 echo -- Removing reference to jsfxr from index.html
 sed -i "" /jsfxr/d $OUTDIR/index.html
+echo -- Removing reference to promis.js from index.html
+sed -i "" /promise\.js/d $OUTDIR/index.html
 
 echo -- Zipping
 zip -r -9 -x $OUTDIR/app.js -o $OUTDIR $OUTDIR
