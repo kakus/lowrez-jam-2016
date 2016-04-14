@@ -76,7 +76,7 @@ namespace game {
             {
                 let t = a;
                 a = b;
-                a = t;
+                b = t;
             }
             
             let delta = TMP1;
@@ -162,11 +162,6 @@ namespace game {
                     }
                 }
             }
-        }
-        
-        export function gentop(width: number, height = Math.floor(width/2) + 1): number[][]
-        {
-            return gen(width, height);
         }
     }
     
