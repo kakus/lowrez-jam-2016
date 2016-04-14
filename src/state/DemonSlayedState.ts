@@ -8,7 +8,7 @@
 
 namespace state {
     
-    export class YouDiedState extends AbstractState 
+    export class DemonSlayedState extends AbstractState 
     {
 
         IsKeyDown: boolean[];
@@ -24,7 +24,7 @@ namespace state {
             
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
             
-            let txt = new gfx.AAText(17, 27, "YOU DIED");
+            let txt = new gfx.AAText(9, 27, "DEMON SLAYED");
             txt.SetSize(5);
             
             for (let i = 0; i < 4; ++i) {
@@ -35,12 +35,12 @@ namespace state {
                 fill.Position.Set(14 + i * 10, 35);
                 
                 this.Stage.AddChild(frame);
-                if (i <= game.context.LifesLeft) {
+                if (i < game.context.LifesLeft) {
                     this.Stage.AddChild(fill);
                 }
-                if (i == game.context.LifesLeft) {
-                    this.Timers.Repeat(0.3, () => fill.Visible = !fill.Visible, undefined, 11);
-                }
+                // if (i == game.context.LifesLeft) {
+                //     this.Timers.Repeat(0.3, () => fill.Visible = !fill.Visible, undefined, 11);
+                // }
             }                
             
             this.Stage.AddChild(txt);
@@ -48,6 +48,7 @@ namespace state {
             // this.Stage.Alpha = 0;
             this.DimScreen(true, 2);
             this.Timers.Delay(4, () => this.OnKeyDown(core.key.UP));
+            
             
             this.InputController = new core.GenericInputController();
             this.ListenForKeyboard();

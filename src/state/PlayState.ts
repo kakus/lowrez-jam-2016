@@ -124,7 +124,7 @@ namespace state {
         BeginFigthMode(demonName: string): void
         {
             let gen = new game.TeethGenertor(game.theeth.demon1.upper, game.theeth.demon1.lower, game.theeth.demon1.gap);
-            this.FightMode = new game.FightMode(0, 0, gen);
+            this.FightMode = new game.FightMode(0, 0, gen, demonName);
             this.Stage.AddChild(this.FightMode);
             
             this.Purgatory.RemoveFromParent();
@@ -158,7 +158,7 @@ namespace state {
                 .Start();
         }
         
-        BlinkScreen(time: number = 1, rate: number = 0.05): void
+        BlinkScreen(time: number = 1, rate: number = 0.1): void
         {
             let rect = new gfx.Rectangle(0, 0, this.Stage.Size.x, this.Stage.Size.y, {
                 fillStyle: 'white', compositeOperation: 'difference'

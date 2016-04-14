@@ -42,8 +42,10 @@ namespace game {
         
         
         
-        constructor(x: number, y: number, generator: TeethGenertor)
-        {
+        constructor(
+            x: number, y: number, generator: TeethGenertor,
+            public DemonName: string
+        ) {
             super(x, y, 64, 64);
             
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
@@ -63,14 +65,15 @@ namespace game {
             this.ToothRestartX = generator.LastX;
             
             this.Mouth.AddChild(this.Teeth, this.Player, this.Marker, this.BloodParticles);
-            this.Face.AddChild(this.DemonFace, this.DemonHealthBarBg, this.DemonHealthBar);
+            this.Face.AddChild(this.DemonFace);
+            
             
             this.SetupBloodParticles(20);
             this.BloodParticles.Visible = false;
             
             this.DemonHealthBar.Progress.OnChange.Add(value => {
                 if (value <= 0) {
-                    console.log("you killed demon");
+                    this.DemonSlayed();
                 }
             });
             
@@ -110,9 +113,10 @@ namespace game {
         
         DrawSelf(ctx: CanvasRenderingContext2D): void
         {
-            // this.Area.Draw(ctx);
             this.Mouth.Draw(ctx);
             this.Face.Draw(ctx);
+            this.DemonHealthBarBg.Draw(ctx);
+            this.DemonHealthBar.Draw(ctx);
         }
         
         Flap(): void
@@ -136,24 +140,24 @@ namespace game {
         {
             if (!this.Player.IsActive) return;
             
-            this.DemonHealthBar.Progress.Increment(-0.05);
             this.DemonFace.Hurt();
             
             this.PlayerVelocity.y = FLIP_POWER * (upperLip ? 0.45 : -1);
             context.PlayState.ShakeScreen(0.3, 3);
             
-            let t = this.Timers.Repeat(0, () => this.CanFlap = false, undefined)
+            let t = this.Timers.Repeat(0, () => this.CanFlap = false)
             this.Timers.Delay(0.2, () => t.Stop());
             
-            let blood = new core.Vector();
+            let bloodPos = new core.Vector();
             if (upperLip) {
-                this.Player.Position.Clone(blood);
+                this.Player.Position.Clone(bloodPos);
             }
             else {
-                vec.Add(this.Player.Position, this.Player.Size, blood);
+                vec.Add(this.Player.Position, this.Player.Size, bloodPos);
             }
+            this.EmitBloodParicles(bloodPos, upperLip);
             
-            this.EmitBloodParicles(blood, upperLip);    
+            this.DemonHealthBar.Progress.Increment(-0.25);
         }
         
         private PlayerTakeDamage(): void
@@ -163,6 +167,8 @@ namespace game {
             
             this.Player.IsActive = false;
             this.TeethVelocity.Set(0, 0);
+            this.Gravity.Set(0, 0);
+            this.PlayerVelocity.Set(0, 0);
             
             const delay = 2;
             const fade = 2;
@@ -182,10 +188,43 @@ namespace game {
                     game.context.LifesLeft -= 1;
                     GAME.Play('you-died');
                 });
-                
-                
-            // this.PlayerHealthBar.Progress.Increment(-0.1);
+        }
+        
+        private DemonSlayed(): void
+        {
+            if (!this.Player.IsActive) return;
             
+            context.KilledDemons.push(this.DemonName);
+            
+            this.Player.IsActive = false;
+            this.TeethVelocity.Set(0, 0);
+            this.Gravity.Set(0, 0);
+            this.PlayerVelocity.Set(0, 0);
+            
+            const delay = 2;
+            const fade = 2;
+            
+            this.Tween.New(this.Mouth)
+                .Delay(delay)
+                .Then()
+                .To({Alpha: 0}, fade * 0.75)
+                .Parallel(this.Mouth.Position, t => t
+                    .To({y: this.Mouth.Position.y + 50}, fade, core.easing.CubicIn)
+                    .OnUpdate(QUANTIZE_POS))
+                .Start();
+                
+            this.Tween.New(this.Face)
+                .Delay(delay)
+                .WhenDone(() => context.PlayState.ShakeScreen(fade, 4))
+                .Then()
+                .To({Alpha: 0}, fade)
+                .Parallel(this.Face.Position, t => t
+                    .To({y: this.Face.Position.y + 50}, fade, core.easing.CubicIn)
+                    .OnUpdate(QUANTIZE_POS))
+                .Start()
+                .WhenDone(() => {
+                    GAME.Play('demon-slayed');
+                });
         }
         
         private CheckCollision(): boolean
