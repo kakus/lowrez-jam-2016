@@ -145,10 +145,11 @@ namespace game {
         
         private PlayerDied(): void
         {
-            this.Player.PlayDead();
-            this.ShowText("YOU DIED", 'red')
+            this.Timer.Delay(1, () => context.PlayState.DimScreen(false, 1));
+            this.Player.PlayDead()
                 .WhenDone(() => {
-                    context.PlayState.RestartPurgatory();
+                    game.context.LifesLeft -= 1;
+                    GAME.Play('you-died');
                 });                        
         }
         

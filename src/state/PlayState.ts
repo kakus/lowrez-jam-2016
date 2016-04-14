@@ -42,14 +42,7 @@ namespace state {
             
             game.context.PlayState = this;
             
-            gfx.Sprite.Load(
-                ['spritesheet', 'assets/images/spritesheet.png']
-            ).then(() => {
-                this.RestartPurgatory();
-                // this.FightMode = new game.FightMode(0, 0, 
-                //     new game.TeethGenertor(game.theeth.demon1.upper, game.theeth.demon1.lower, game.theeth.demon1.gap));
-                // this.Stage.AddChild(this.FightMode);
-            });
+            
 
             // setup controlls
             // this thing is unused here in this demo, since I think
@@ -66,6 +59,9 @@ namespace state {
             
             // fit window
             this.OnResize();
+            
+            // start game.
+            this.RestartPurgatory();
         }
 
 
@@ -123,10 +119,6 @@ namespace state {
         {
             super.OnResize();
             audio.manager.Volume = 0;
-            this.Game.Context['imageSmoothingEnabled'] = false;
-            this.Game.Context['mozImageSmoothingEnabled'] = false;
-            this.Game.Context['webkitImageSmoothingEnabled'] = false;
-            this.Game.Context['msImageSmoothingEnabled'] = false;
         }
         
         BeginFigthMode(demonName: string): void

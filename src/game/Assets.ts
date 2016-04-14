@@ -21,6 +21,9 @@ namespace game {
         SWORD: [71, 72, 73, 74, 75, 76, 77, 78],
         TORCH_FRAMES: [41, 42, 43, 44],
         
+        HEART_FRAME: 37,
+        HEART_FILL: 38,
+        
         // same grid as floating tile frames
         RED_DEMON_FRAMES: [21, 22],
         BLUE_DEMON_FRAMES: [23, 24],

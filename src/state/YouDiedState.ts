@@ -22,14 +22,31 @@ namespace state {
             this.DefaultSize.Set(64, 64);
             super.Start();
             
-            let txt = new gfx.AAText(32, 32, "YOU DIED");
+            let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
+            
+            let txt = new gfx.AAText(17, 27, "YOU DIED");
             txt.SetSize(5);
-            txt.Anchor.Set(0.5, 0.5);
+            
+            for (let i = 0; i < 4; ++i) {
+                let frame = ss.GetSprite(game.assets.HEART_FRAME);
+                let fill = ss.GetSprite(game.assets.HEART_FILL);
+                
+                frame.Position.Set(14 + i * 10, 35);
+                fill.Position.Set(14 + i * 10, 35);
+                
+                this.Stage.AddChild(frame);
+                if (i <= game.context.LifesLeft) {
+                    this.Stage.AddChild(fill);
+                }
+                if (i == game.context.LifesLeft) {
+                    this.Timers.Repeat(0.3, () => fill.Visible = !fill.Visible, undefined, 11);
+                }
+            }                
             
             this.Stage.AddChild(txt);
             
             // this.Stage.Alpha = 0;
-            this.DimScreen(true, 3);
+            this.DimScreen(true, 2);
             
             this.InputController = new core.GenericInputController();
             this.ListenForKeyboard();
@@ -44,16 +61,12 @@ namespace state {
         
         OnKeyDown(key: core.key): void
         {
-            this.Game.Play('play');
-        }
-        
-        OnResize(): void
-        {
-            super.OnResize();
-            this.Game.Context['imageSmoothingEnabled'] = false;
-            this.Game.Context['mozImageSmoothingEnabled'] = false;
-            this.Game.Context['webkitImageSmoothingEnabled'] = false;
-            this.Game.Context['msImageSmoothingEnabled'] = false;
+            if (game.context.LifesLeft > 0) {
+                this.Game.Play('play');
+            }
+            else {
+                this.Game.Play('menu');
+            }
         }
         
         DimScreen(reverse = false, time = 2): core.Tween

@@ -100,6 +100,11 @@ namespace state {
 			{
 				this.Game.Canvas.height = canvasHeight;
 			}
+			
+			this.Game.Context['imageSmoothingEnabled'] = false;
+            this.Game.Context['mozImageSmoothingEnabled'] = false;
+            this.Game.Context['webkitImageSmoothingEnabled'] = false;
+            this.Game.Context['msImageSmoothingEnabled'] = false;
 		}
 		
 		ShowFps(): void

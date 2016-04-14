@@ -12,5 +12,5 @@ GAME.AddState('loading', new state.LoadingState());
 GAME.AddState('menu', new state.Menu());
 GAME.AddState('play', new state.PlayState());
 GAME.AddState('you-died', new state.YouDiedState());
-GAME.Play('play');
+GAME.Play('loading');
 GAME.Start();

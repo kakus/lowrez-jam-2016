@@ -158,6 +158,9 @@ namespace game {
         
         private PlayerTakeDamage(): void
         {
+            // this could happen if we fall onto another tooth while falling.
+            if (!this.Player.IsActive) return;
+            
             this.Player.IsActive = false;
             this.TeethVelocity.Set(0, 0);
             
@@ -176,6 +179,7 @@ namespace game {
                 .To({Alpha: 0}, fade)
                 .Start()
                 .WhenDone(() => {
+                    game.context.LifesLeft -= 1;
                     GAME.Play('you-died');
                 });
                 
