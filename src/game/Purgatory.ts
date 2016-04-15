@@ -267,6 +267,12 @@ namespace game {
                                 return;
                             }
                             break;
+                            
+                        // hidden tiles
+                        case 12:
+                            tile = new AFloatingTile(0, 0, this.SpriteSheet.ImageId);
+                            tile.Alpha = 0;
+                            break; 
                         
                         default: throw new Error('tile not mapped.')
                     }
@@ -287,44 +293,51 @@ namespace game {
             
             data.layer.actors.forEach((row, y) => {
                 row.forEach((tileId, x) => {
-                  let actor: Actor;
-                  
-                  switch (tileId) {
-                      case 0: return;
-                      case 2: actor = new ATorch(0, 0, this.SpriteSheet); break;
-                      case 3: 
-                        actor = this.Player = new AHero(0, 0, this.SpriteSheet);
-                        this.Timer.Delay(0.8, () => {
-                            let fall = this.Player.FallFromHeaven();
-                            if (context.IsOnlyBossAlive()) {
-                                fall.WhenDone(() => {
-                                    this.CameraShowPathToFinalBoss();
-                                })
+                    let actor: Actor;
+                    
+                    switch (tileId) {
+                        case 0: return;
+                        case 2: actor = new ATorch(0, 0, this.SpriteSheet); break;
+                        
+                        case 3: 
+                            actor = this.Player = new AHero(0, 0, this.SpriteSheet);
+                            this.Timer.Delay(0.8, () => {
+                                let fall = this.Player.FallFromHeaven();
+                                if (context.IsOnlyBossAlive()) {
+                                    fall.WhenDone(() => {
+                                        this.CameraShowPathToFinalBoss();
+                                    })
+                                }
+                            });
+                        break;
+                        
+                        case 4: 
+                        case 5: 
+                        case 6: 
+                            actor = this.Spawner.SpawnActor(actorSlot++); 
+                            if (actor instanceof ADemon) {
+                                this.Demons.push(actor as ADemon);
+                            } 
+                            else if (actor instanceof AItem) {
+                                this.Items.push(actor);
+                            } 
+                            else {
+                                return;
                             }
-                        });
                         break;
-                      
-                      case 4: 
-                      case 5: 
-                      case 6: 
-                        actor = this.Spawner.SpawnActor(actorSlot++); 
-                        if (actor instanceof ADemon) {
-                            this.Demons.push(actor as ADemon);
-                        } 
-                        else if (actor instanceof AItem) {
-                            this.Items.push(actor);
-                        } 
-                        else {
-                            return;
-                        }
-                        break;
-                      default: console.error(`actor not mapped. (${tileId})`); return;
-                  }
+                        
+                        case 7:
+                            actor = new ALifeBonus(0, 0, this.SpriteSheet);
+                            this.Items.push(actor as ALifeBonus);
+                            break;
+                
+                        default: console.error(`actor not mapped. (${tileId})`); return;
+                    }
                   
-                  actor.GridPosition.Set(x, y);
-                  core.vector.Multiply(actor.GridPosition, this.SpriteSheet.CellSize, actor.Position);
-                  
-                  this.ActorLayer.AddChild(actor);
+                    actor.GridPosition.Set(x, y);
+                    core.vector.Multiply(actor.GridPosition, this.SpriteSheet.CellSize, actor.Position);
+                    
+                    this.ActorLayer.AddChild(actor);
                 });
             });
             
