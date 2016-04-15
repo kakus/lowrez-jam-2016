@@ -38,6 +38,7 @@ namespace core {
 		OnStart = new CallbackSet();
 		OnUpdateCallbacks = new CallbackSet();
 		IsDone = false;
+		IsLooping = false;
 		PlayReversed = false;
 		
 		constructor(
@@ -179,9 +180,7 @@ namespace core {
 		
 		Loop(): Tween
 		{
-			this.OnStart.Add(() => {
-				setTimeout(this.Start.bind(this), 0);
-			});
+			this.IsLooping = true;
 			return this;
 		}
 		
@@ -204,10 +203,17 @@ namespace core {
 				{
 					if (!self.IsDone)
 					{
+						self.IsDone = true;
+						
 						self.UpdateProperties(self.Duration);
 						self.OnDoneCallbacks.CallAll(self.Target);
-						if (self.Manager && !self.Next) self.Manager.StopTween(self.GetRoot());
-						self.IsDone = true;
+						
+						if (self.Manager && !self.Next && !self.IsLooping) {
+							self.Manager.StopTween(self.GetRoot());
+						}
+						if (self.IsLooping) {
+							self.Start();
+						}
 					}
 					
 					self = self.Next;
@@ -332,10 +338,17 @@ namespace core {
         
         StopAll(finishTween = true): void
         {
-            for (let i = this.Tweens.length - 1; i >= 0; --i)
-            {
-                this.Tweens[i].Stop(finishTween);
-            }
+			if (finishTween) 
+			{
+				for (let i = this.Tweens.length - 1; i >= 0; --i)
+				{
+					this.Tweens[i].Stop(true);
+				}
+			}
+			else
+			{
+				this.Tweens = [];
+			}
         }
 	}
 	
