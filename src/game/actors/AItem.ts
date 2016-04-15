@@ -54,12 +54,14 @@ namespace game {
         
         Execute(): void
         {
-            context.LifesLeft += 1;
+            if (context.LifesLeft < 4) {
+                context.LifesLeft += 1;
+            }
         }
         
         GetDescription(): [string, string]
         {
-            return ["hitpoints", "increased"];
+            return ["one more", "chance"];
         }
     }
     
