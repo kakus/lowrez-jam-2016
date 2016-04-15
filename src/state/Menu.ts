@@ -11,15 +11,11 @@ namespace state {
     export class Menu extends AbstractState 
     {
 
-        IsKeyDown: boolean[];
-        
         /**
 		 * Called once before first update
 		 */
         Start() 
         {
-            this.IsKeyDown = [];
-            this.DefaultSize.Set(64, 64);
             super.Start();
 			/**
 			 * RESET CONTEXT
@@ -48,22 +44,11 @@ namespace state {
 
         OnKeyUp(key: core.key): void
         {
-            this.IsKeyDown[key] = false;
         }
         
         OnKeyDown(key: core.key): void
         {
             this.Game.Play('play');
-        }
-        
-        DimScreen(reverse = false, time = 2): core.Tween
-        {
-            if (reverse) {
-                this.Stage.Alpha = 1 - this.Stage.Alpha;
-            }
-            return this.Tweens.New(this.Stage)
-                .To({Alpha: reverse ? 1 : 0}, time)
-                .Start();
         }
 
     }

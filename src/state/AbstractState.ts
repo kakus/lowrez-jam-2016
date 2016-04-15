@@ -12,7 +12,7 @@ namespace state {
 	{
 		Game: core.Game;
 		Stage: core.Layer<core.DisplayObject>;
-		DefaultSize = new core.Vector(320, 400);
+		DefaultSize = new core.Vector(64, 64);
 		InputController: core.IInputController;
 		Tweens: core.TweenManager;
 		Timers: core.TimersManager;
@@ -68,12 +68,10 @@ namespace state {
 		
 		OnKeyDown(key: core.key)
 		{
-			console.log('keydown ', key);
 		}
         
 		OnKeyUp(key: core.key)
 		{
-			console.log('keyup ', key);
 		}
 		
 		OnResize(): void

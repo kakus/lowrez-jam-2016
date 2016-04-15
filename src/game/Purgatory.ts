@@ -180,7 +180,9 @@ namespace game {
                     this.Player.IsActive = false;
                     context.AquiredItems.push(item.Name);
                     
+                    item.Execute();
                     item.ShowInGlory();
+                    
                     this.ShowText(item.GetDescription()[0], 'white', 15)
                     this.ShowText(item.GetDescription()[1], 'white', 21)
                         .WhenDone(() => {

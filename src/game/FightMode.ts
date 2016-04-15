@@ -380,7 +380,7 @@ namespace game {
         
         DrawSelf(ctx: CanvasRenderingContext2D): void
         {
-            ctx.globalCompositeOperation = 'source-in';
+            ctx.globalCompositeOperation = 'destination-in';
             this.Shape.Draw(ctx);
         }
     }

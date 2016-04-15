@@ -16,10 +16,9 @@ namespace game {
             this.Shadow = sheet.GetSprite(assets.SMALL_SHADOW);
             
             this.Tween.New(this.Sprite.Position)
-                .To({y: -5}, 1, core.easing.SinusoidalInOut)
+                .To({y: -4}, 1, core.easing.SinusoidalInOut)
                 .Then()
-                .To({y: 0}, 1, core.easing.SinusoidalInOut)
-                .Then()
+                .To({y: 0.5}, 1, core.easing.SinusoidalInOut)
                 .Loop()
                 .Start();
         }
@@ -38,6 +37,8 @@ namespace game {
                 .Start();
         }
         
+        abstract Execute(): void;
+        
         /**
          * Return description of item, top line and bottom line.
          */
@@ -51,6 +52,11 @@ namespace game {
             super(x, y, assets.HEART, sheet, 'Life');
         }
         
+        Execute(): void
+        {
+            context.LifesLeft += 1;
+        }
+        
         GetDescription(): [string, string]
         {
             return ["hitpoints", "increased"];
@@ -62,6 +68,11 @@ namespace game {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
             super(x, y, assets.SWORD, sheet, 'Attack');
+        }
+        
+        Execute(): void
+        {
+            // the real power is just inside you!
         }
         
         GetDescription(): [string, string]

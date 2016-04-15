@@ -143,23 +143,6 @@ namespace state {
             this.Stage.AddChild(this.Purgatory);
         }
         
-        ShakeScreen(time: number, amplitude: number = 5): core.Tween
-        {
-            return this.Tweens.New(this.Stage.Position)
-                .OnUpdate((position, progress) =>{
-                    progress = progress > 0.5 ? 2 - progress * 2 : progress * 2;
-                    position.Set(
-                        (core.Random(-amplitude, amplitude) * progress)| 0,
-                        (core.Random(-amplitude, amplitude) * progress)| 0
-                    );
-                })
-                .Delay(time)
-                .Then()
-                // restore
-                .To({x: 0, y: 0}, 0.01)
-                .Start();
-        }
-        
         BlinkScreen(time: number = 1, rate: number = 0.1): void
         {
             let rect = new gfx.Rectangle(0, 0, this.Stage.Size.x, this.Stage.Size.y, {
@@ -177,16 +160,6 @@ namespace state {
                     rect.Visible = !rect.Visible;
                     
             }, undefined, callLimit);            
-        }
-        
-        DimScreen(reverse = false, time = 2): core.Tween
-        {
-            if (reverse) {
-                this.Stage.Alpha = 1 - this.Stage.Alpha;
-            }
-            return this.Tweens.New(this.Stage)
-                .To({Alpha: reverse ? 1 : 0}, time)
-                .Start();
         }
         
         MoveCameraTo(target: core.Vector, duration = 1): core.Tween
