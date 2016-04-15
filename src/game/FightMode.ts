@@ -70,8 +70,12 @@ namespace game {
             // this.Mouth.AddChild(this.Marker);
             this.Face.AddChild(this.DemonFace);
             
-            if (!context.PlayerHas('Light')) {
-                this.ActiveLightCone(ss);
+            if (context.DemonNeedsLight(this.DemonName)) 
+            {
+                if (!context.PlayerHas('Light')) 
+                {
+                    this.ActiveLightCone(ss);
+                }
             }
             
             this.SetupBloodParticles(20);

@@ -27,6 +27,11 @@ namespace game {
             return this.AquiredItems.indexOf(itemName) !== -1;
         }
         
+        DemonNeedsLight(demonName: string): boolean
+        {
+            return ['Dark', 'Purple', 'Green'].indexOf(demonName) !== -1;
+        }
+        
         Reset(): void
         {
             console.log("Reseting context.");
