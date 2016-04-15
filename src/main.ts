@@ -5,6 +5,7 @@
 /// <reference path="state/Loading.ts" />
 /// <reference path="state/YouDiedState.ts" />
 /// <reference path="state/DemonSlayedState.ts" />
+/// <reference path="state/EpilogState.ts" />
 
 
 let GAME = new core.Game('canvas');
@@ -14,5 +15,6 @@ GAME.AddState('menu', new state.Menu());
 GAME.AddState('play', new state.PlayState());
 GAME.AddState('you-died', new state.YouDiedState());
 GAME.AddState('demon-slayed', new state.DemonSlayedState());
+GAME.AddState('epilog', new state.EpilogState());
 GAME.Play('loading');
 GAME.Start();

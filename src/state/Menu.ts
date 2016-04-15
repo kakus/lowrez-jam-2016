@@ -27,7 +27,9 @@ namespace state {
 			game.context.Reset();
             
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
-            
+            /**
+			 * rycerz spi przy ognisku !!!!
+			 */
             let t1 = new gfx.AAText(17, 45, "PRESS UP");
             let t2 = new gfx.AAText(17, 51, "TO START");
             t1.SetSize(5);               

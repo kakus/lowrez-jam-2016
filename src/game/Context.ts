@@ -17,6 +17,11 @@ namespace game {
             return this.KilledDemons.length === 4;
         }
         
+        AllDemonsKilled(): boolean
+        {
+            return this.KilledDemons.length === 5;
+        }
+        
         Reset(): void
         {
             console.log("Reseting context.");

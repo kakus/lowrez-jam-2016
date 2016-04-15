@@ -32,6 +32,7 @@ namespace state {
                 ['spritesheet', 'assets/images/spritesheet.png']
             ).then(() => {
                 this.Game.Play('menu');
+                // this.Game.Play('epilog');
             });
 			
 			this.OnResize();

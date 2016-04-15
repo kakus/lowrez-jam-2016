@@ -11,14 +11,8 @@ namespace state {
     export class DemonSlayedState extends AbstractState 
     {
 
-        IsKeyDown: boolean[];
-        
-        /**
-		 * Called once before first update
-		 */
         Start() 
         {
-            this.IsKeyDown = [];
             this.DefaultSize.Set(64, 64);
             super.Start();
             
@@ -54,31 +48,15 @@ namespace state {
             this.ListenForKeyboard();
             this.OnResize();
         }
-
-
-        OnKeyUp(key: core.key): void
-        {
-            this.IsKeyDown[key] = false;
-        }
         
         OnKeyDown(key: core.key): void
         {
-            if (game.context.LifesLeft > 0) {
-                this.Game.Play('play');
+            if (game.context.AllDemonsKilled()) {
+                this.Game.Play('epilog');
             }
             else {
-                this.Game.Play('menu');
+                this.Game.Play('play');
             }
-        }
-        
-        DimScreen(reverse = false, time = 2): core.Tween
-        {
-            if (reverse) {
-                this.Stage.Alpha = 1 - this.Stage.Alpha;
-            }
-            return this.Tweens.New(this.Stage)
-                .To({Alpha: reverse ? 1 : 0}, time)
-                .Start();
         }
 
     }

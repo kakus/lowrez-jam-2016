@@ -112,6 +112,33 @@ namespace state {
             this.FPSText.Visible = true;
 		}
 		
+		 
+        DimScreen(reverse = false, time = 2): core.Tween
+        {
+            if (reverse) {
+                this.Stage.Alpha = 1 - this.Stage.Alpha;
+            }
+            return this.Tweens.New(this.Stage)
+                .To({Alpha: reverse ? 1 : 0}, time)
+                .Start();
+        }
+        
+        ShakeScreen(time: number, amplitude: number = 5): core.Tween
+        {
+            return this.Tweens.New(this.Stage.Position)
+                .OnUpdate((position, progress) =>{
+                    progress = Math.sin(progress * Math.PI);
+                    position.Set(
+                        (core.Random(-amplitude, amplitude) * progress)| 0,
+                        (core.Random(-amplitude, amplitude) * progress)| 0
+                    );
+                })
+                .Delay(time)
+                .Then()
+                .To({x: 0, y: 0}, 0.01)
+                .Start();
+        }
+		
 		protected ListenForMouseInput(): void
 		{
 			if (!this.InputController) throw Error();
