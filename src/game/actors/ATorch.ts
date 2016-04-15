@@ -7,7 +7,7 @@ namespace game {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
             super(x, y, sheet.CellSize.x, sheet.CellSize.y);
-            let a = this.Animator.AddAnimation('idle', assets.TORCH_FRAMES, sheet);
+            let a = this.Animator.AddAnimation('idle', assets.GREEN_TORCH_FRAMES, sheet);
             a.Loop = true;
             this.Animator.Play('idle');
         }

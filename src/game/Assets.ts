@@ -19,7 +19,8 @@ namespace game {
         HEART: [35, 36],
         ATTACK_BONUS: 34,
         SWORD: [71, 72, 73, 74, 75, 76, 77, 78],
-        TORCH_FRAMES: [41, 42, 43, 44],
+        PLAYER_TORCH: [81, 82, 83, 84, 85, 86, 87, 88, 89],
+        GREEN_TORCH_FRAMES: [41, 42, 43, 44],
         
         HEART_FRAME: 37,
         HEART_FILL: 38,
@@ -33,7 +34,7 @@ namespace game {
         
         // gui of fight scene
         // just position on 24x24 grid, size is different.
-        FIGHT_DEMON_HEALTHBAR: 81,
+        FIGHT_DEMON_HEALTHBAR: 117,
         
         FIGHT_DEMON_MOUTH: {
             // index in 24x24 grid of top left pixel of image 64x64

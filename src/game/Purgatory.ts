@@ -387,6 +387,7 @@ namespace game {
                     
                     case 'Life': return new ALifeBonus(0, 0, this.Sheet);
                     case 'Sword': return new AAttackBonus(0, 0, this.Sheet);
+                    case 'Light': return new ALightBonus(0, 0, this.Sheet);
                 }
             }
             

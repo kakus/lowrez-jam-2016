@@ -82,4 +82,22 @@ namespace game {
             return ["attack", "increased"];
         }
     }
+    
+    export class ALightBonus extends AItem
+    {
+        constructor(x: number, y: number, sheet: gfx.SpriteSheet)
+        {
+            super(x, y, assets.PLAYER_TORCH, sheet, 'Light');
+        }
+        
+        Execute(): void
+        {
+            // hello darkness my old friend.
+        }
+        
+        GetDescription(): [string, string]
+        {
+            return ["coisy", "fire"];
+        }
+    }
 }
