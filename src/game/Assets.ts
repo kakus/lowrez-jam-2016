@@ -39,7 +39,10 @@ namespace game {
             // index in 24x24 grid of top left pixel of image 64x64
             // size is manually changed.
             RED: [91, 94]
-        }
+        },
+    
+        // Size 40x40    
+        FIGHT_LIGHT_CONE: 97
     }
     
 }

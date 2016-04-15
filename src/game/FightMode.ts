@@ -4,6 +4,7 @@
 /// <reference path="../core/Color.ts" />
 /// <reference path="../core/ObservableProperty.ts" />
 /// <reference path="TeethGenerator.ts" />
+/// <reference path="../gfx/Circle.ts" />
 
 
 
@@ -21,6 +22,7 @@ namespace game {
         Teeth = new core.Layer<ATooth>();
         TeethVelocity = new core.Vector(-10, 0);
         ToothRestartX: number;
+        LightCone: LightCone;
         
         Player = new ATooth(5, 20, tooth.player);
         PlayerVelocity = new core.Vector(0, 0);
@@ -32,7 +34,7 @@ namespace game {
         DemonHealthBarBg: gfx.Sprite;
         DemonHealthBar = new HealthBar(5, 2, 54, 2, new core.RgbColor(174, 50, 50, 1));
         
-        Marker = new gfx.Rectangle(0, 0, 4, 4, {fillStyle: "rgba(255, 0, 0, 0.5)"});
+        // Marker = new gfx.Rectangle(0, 0, 4, 4, {fillStyle: "rgba(255, 0, 0, 0.5)"});
         
         TimeScale = 1;
         Timers = new core.TimersManager();
@@ -64,9 +66,13 @@ namespace game {
                 
             this.ToothRestartX = generator.LastX;
             
-            this.Mouth.AddChild(this.Teeth, this.Player, this.Marker, this.BloodParticles);
+            this.Mouth.AddChild(this.Teeth, this.Player, this.BloodParticles);
+            // this.Mouth.AddChild(this.Marker);
             this.Face.AddChild(this.DemonFace);
             
+            if (!context.PlayerHas('Light')) {
+                this.ActiveLightCone(ss);
+            }
             
             this.SetupBloodParticles(20);
             this.BloodParticles.Visible = false;
@@ -86,8 +92,8 @@ namespace game {
         {
             timeDelta *= this.TimeScale;
             // Debug code
-            this.Player.Position.Clone(this.Marker.Position);
-            this.Marker.Visible = false;
+            // this.Player.Position.Clone(this.Marker.Position);
+            // this.Marker.Visible = false;
             
             this.Timers.Update(timeDelta);
             this.BloodTween.Update(timeDelta);
@@ -157,7 +163,7 @@ namespace game {
             }
             this.EmitBloodParicles(bloodPos, upperLip);
             
-            this.DemonHealthBar.Progress.Increment(-0.25);
+            this.DemonHealthBar.Progress.Increment(-0.05);
         }
         
         private PlayerTakeDamage(): void
@@ -239,7 +245,7 @@ namespace game {
                         this.PlayerTakeDamage();
                     }
                     
-                    this.Marker.Visible = true;
+                    // this.Marker.Visible = true;
                     return true;
                 }
             }
@@ -318,6 +324,22 @@ namespace game {
                 .WhenDone(() => this.BloodParticles.Visible = false);
         }
         
+        private ActiveLightCone(ss: gfx.SpriteSheet): void
+        {
+            
+            let shape = ss.GetSprite(assets.FIGHT_LIGHT_CONE);
+            shape.Size.Set(40, 40);
+            shape.SourceRect.Size.Set(40, 40);
+            
+            this.LightCone = new LightCone(0, 0, shape);
+            this.LightCone.Position.x = this.Player.Position.x - this.LightCone.Size.x/2 + 2;
+            this.Timers.Repeat(0, () => {
+                this.LightCone.Position.y = this.Player.Position.y - this.LightCone.Size.x/2 + 2;
+            })
+            
+            this.Mouth.AddChild(this.LightCone);
+        }
+        
     }
     
     class HealthBar extends core.DisplayObject
@@ -344,6 +366,22 @@ namespace game {
         {
             // this.Background.Draw(ctx);
             this.Fill.Draw(ctx);
+        }
+    }
+    
+    class LightCone extends core.DisplayObject
+    {
+        constructor(
+            x: number, y: number,
+            public Shape: core.DisplayObject
+        ) {
+            super(x, y, Shape.Size.x, Shape.Size.y);            
+        }
+        
+        DrawSelf(ctx: CanvasRenderingContext2D): void
+        {
+            ctx.globalCompositeOperation = 'source-in';
+            this.Shape.Draw(ctx);
         }
     }
     

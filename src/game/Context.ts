@@ -22,6 +22,11 @@ namespace game {
             return this.KilledDemons.length === 5;
         }
         
+        PlayerHas(itemName: string): boolean
+        {
+            return this.AquiredItems.indexOf(itemName) !== -1;
+        }
+        
         Reset(): void
         {
             console.log("Reseting context.");

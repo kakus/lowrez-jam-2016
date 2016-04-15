@@ -127,8 +127,10 @@ namespace state {
             this.FightMode = new game.FightMode(0, 0, gen, demonName);
             this.Stage.AddChild(this.FightMode);
             
-            this.Purgatory.RemoveFromParent();
-            this.Purgatory = null;
+            if (this.Purgatory) {
+                this.Purgatory.RemoveFromParent();
+                this.Purgatory = null;
+            }
         }
         
         RestartPurgatory(): void
