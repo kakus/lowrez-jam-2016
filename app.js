@@ -3595,8 +3595,8 @@ var state;
             // fit window
             this.OnResize();
             // start game.
-            // this.RestartPurgatory();
-            this.BeginFigthMode('Red');
+            this.RestartPurgatory();
+            // this.BeginFigthMode('Red');
         };
         PlayState.prototype.OnKeyUp = function (key) {
             this.IsKeyDown[key] = false;
@@ -3802,7 +3802,7 @@ var state;
             });
             this.Stage.AddChild(txt);
             gfx.Sprite.Load(['spritesheet', 'assets/images/spritesheet.png']).then(function () {
-                _this.Game.Play('play');
+                _this.Game.Play('menu');
                 // this.Game.Play('epilog');
             });
             this.OnResize();
