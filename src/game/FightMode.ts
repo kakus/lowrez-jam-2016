@@ -167,7 +167,12 @@ namespace game {
             }
             this.EmitBloodParicles(bloodPos, upperLip);
             
-            this.DemonHealthBar.Progress.Increment(-0.05);
+            if (context.PlayerHas('Sword')) {
+                this.DemonHealthBar.Progress.Increment(-0.1);
+            }
+            else {
+                this.DemonHealthBar.Progress.Increment(-0.05);
+            }
         }
         
         private PlayerTakeDamage(): void

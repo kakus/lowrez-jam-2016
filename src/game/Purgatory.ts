@@ -20,7 +20,7 @@ namespace game {
     
     const LEVEL_1_DEMONS = ['Red', 'Blue'];
     const LEVEL_2_DEMONS = ['Green', 'Purple'];
-    const LEVEL_1_ITEMS = ['Attack', 'Life'];
+    const LEVEL_1_ITEMS = ['Sword', 'Life'];
     const LEVEL_2_ITEMS = ['Punch', 'Light'];
     const LEVEL_BOSS = ['Dark'];
     
@@ -386,7 +386,7 @@ namespace game {
                     case 'Dark': return new ADarkDemon(0, 0, this.Sheet);
                     
                     case 'Life': return new ALifeBonus(0, 0, this.Sheet);
-                    case 'Attack': return new AAttackBonus(0, 0, this.Sheet);
+                    case 'Sword': return new AAttackBonus(0, 0, this.Sheet);
                 }
             }
             

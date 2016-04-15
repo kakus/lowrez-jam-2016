@@ -67,7 +67,7 @@ namespace game {
     {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
-            super(x, y, assets.SWORD, sheet, 'Attack');
+            super(x, y, assets.SWORD, sheet, 'Sword');
         }
         
         Execute(): void
