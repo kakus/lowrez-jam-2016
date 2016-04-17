@@ -25,12 +25,11 @@ namespace game {
         HEART_FRAME: 37,
         HEART_FILL: 38,
         
-        // same grid as floating tile frames
-        RED_DEMON_FRAMES: [21, 22],
-        BLUE_DEMON_FRAMES: [23, 24, 25, 26],
-        GREEN_DEMON_FRAMES: [25, 26],
-        PURPLE_DEMON_FRAMES: [27, 28],
-        DARK_DEMON_FRAMES: [29, 30],
+        RED_DEMON_FRAMES: [51, 52],
+        BLUE_DEMON_FRAMES: [53, 54, 55, 56],
+        GREEN_DEMON_FRAMES: [57, 58, 59, 60],
+        PURPLE_DEMON_FRAMES: [244, 245, 246, 247],
+        DARK_DEMON_FRAMES: [59, 60],
         
         // gui of fight scene
         // just position on 24x24 grid, size is different.
@@ -39,7 +38,9 @@ namespace game {
         FIGHT_DEMON_MOUTH: {
             // index in 24x24 grid of top left pixel of image 64x64
             // size is manually changed.
-            RED: [91, 94]
+            RED: [91, 94],
+            BLUE: [124, 127],
+            GREEN: [154, 157]
         },
     
         // Size 40x40    

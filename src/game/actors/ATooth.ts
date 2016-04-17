@@ -4,9 +4,6 @@ namespace game {
     
     export class ATooth extends Actor
     {
-        
-        Color = 'white';
-        
         /**
          * Since Position can only be integer we have to use separate,
          * property to store floating values.
@@ -14,7 +11,8 @@ namespace game {
         FloatPosition = new core.Vector();
         
         constructor(x: number, y: number, 
-            public Pixels: number[][])
+            public Pixels: number[][],
+            public Color = 'white')
         {
             super(x, y, Pixels[0].length, Pixels.length);
             core.Assert(Pixels.length > 0, "Pixels can't be null.");
@@ -125,7 +123,7 @@ namespace game {
             [1, 0, 1, 0]
         ];
         
-        export function gen(width: number, height = Math.floor(width/2) + 1): number[][]
+        export function spikeLike(width: number, height = Math.floor(width/2) + 1): number[][]
         {
             core.Assert(width % 2 === 1, "only odd width");
             core.Assert(height > 0);
@@ -162,6 +160,29 @@ namespace game {
                     }
                 }
             }
+        }
+        
+        export function circleLike(width: number, height: number): number[][] 
+        {
+            core.Assert(width % 2 === 1, "only odd width");
+            core.Assert(height > 0);
+            
+            let radious = width/2;//Math.floor(width/2);
+            
+            let tooth = [];
+            for (let y = 0; y < height; ++y)
+            {
+                let row = [];
+                for (let x = 0; x < width; ++x)
+                {
+                    let rx = x - radious, ry = y - radious;
+                    row[x] = (Math.sqrt(rx*rx + ry*ry) < radious) ? 1 : 0;
+                }
+                
+                tooth.push(row);
+            }
+            
+            return tooth;
         }
     }
     

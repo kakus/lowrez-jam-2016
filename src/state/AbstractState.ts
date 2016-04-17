@@ -121,7 +121,7 @@ namespace state {
                 .Start();
         }
         
-        ShakeScreen(time: number, amplitude: number = 5): core.Tween
+        ShakeScreen(time: number, amplitude: number = 3): core.Tween
         {
             return this.Tweens.New(this.Stage.Position)
                 .OnUpdate((position, progress) =>{

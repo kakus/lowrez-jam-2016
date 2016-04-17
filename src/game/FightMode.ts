@@ -51,7 +51,7 @@ namespace game {
             super(x, y, 64, 64);
             
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
-            this.DemonFace = new ADemonFace(0, 0, assets.FIGHT_DEMON_MOUTH.RED, ss);
+            this.DemonFace = new ADemonFace(0, 0, assets.FIGHT_DEMON_MOUTH[DemonName.toUpperCase()], ss);
             this.DemonHealthBarBg = ss.GetSprite(assets.FIGHT_DEMON_HEALTHBAR);
             this.DemonHealthBarBg.SourceRect.Size.Set(64, 7);
             this.DemonHealthBarBg.Size.Set(64, 7);

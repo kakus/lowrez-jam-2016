@@ -8,9 +8,15 @@ namespace game {
             public Name: string
         ) {
             super(x, y, 24, 24 * 2);
-            sheet = new gfx.SpriteSheet(sheet.ImageId, new core.Vector(24, 48), new core.Vector(0, 24));
             
-            this.Animator.AddAnimation('idle', frames, sheet).Loop = true;
+            let idle = this.Animator.AddAnimation('idle', frames.map((_, i) => i), frames.map((id) => {
+                let s = sheet.GetSprite(id);
+                s.SourceRect.Size.Set(24, 48);
+                s.Size.Set(24, 48);
+                return s;
+            }));
+            
+            idle.Loop = true;
             this.Animator.Play('idle');
             this.Sprite.Position.y -= 17;
             
