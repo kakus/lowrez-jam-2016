@@ -52,13 +52,24 @@ namespace game {
     const B = tooth.gen(19, 35);
     
     const n = tooth.gen(19, 16);
+    const o = tooth.gen(25, 13);
     
     export const theeth = {
-        demon1: {
+        
+        // red demon
+        Red: {
             upper: [a, _, b, _, n, _],
             lower: [_, B, _, A, n, A],
             gap: 30
+        },
+        
+        //blue demon
+        Blue: {
+            upper: [o, o, o, n, _, o, o, o, n, o],
+            lower: [o, o, o, n, o, o, o, o, n, _],
+            gap: 25
         }
+        
     }
     
 }

@@ -27,7 +27,7 @@ namespace game {
         
         // same grid as floating tile frames
         RED_DEMON_FRAMES: [21, 22],
-        BLUE_DEMON_FRAMES: [23, 24],
+        BLUE_DEMON_FRAMES: [23, 24, 25, 26],
         GREEN_DEMON_FRAMES: [25, 26],
         PURPLE_DEMON_FRAMES: [27, 28],
         DARK_DEMON_FRAMES: [29, 30],
@@ -43,7 +43,9 @@ namespace game {
         },
     
         // Size 40x40    
-        FIGHT_LIGHT_CONE: 97
+        FIGHT_LIGHT_CONE: 97,
+        
+        MAIN_MENU_SCENE: [121, 151, 181, 211]
     }
     
 }

@@ -31,6 +31,7 @@ namespace game {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
             super(x, y, assets.BLUE_DEMON_FRAMES, sheet, "Blue");
+            this.Animator.Animations['idle'].Duration = 2;
         }
     }
     

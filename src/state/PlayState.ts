@@ -123,7 +123,8 @@ namespace state {
         
         BeginFigthMode(demonName: string): void
         {
-            let gen = new game.TeethGenertor(game.theeth.demon1.upper, game.theeth.demon1.lower, game.theeth.demon1.gap);
+            let gen = new game.TeethGenertor(
+                game.theeth[demonName].upper, game.theeth[demonName].lower, game.theeth[demonName].gap);
             this.FightMode = new game.FightMode(0, 0, gen, demonName);
             this.Stage.AddChild(this.FightMode);
             

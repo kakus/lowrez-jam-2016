@@ -10,6 +10,8 @@ namespace state {
     
     export class Menu extends AbstractState 
     {
+		
+		BgScene: gfx.AnimatedSprite;
 
         /**
 		 * Called once before first update
@@ -23,6 +25,19 @@ namespace state {
 			game.context.Reset();
             
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
+			
+			let frames = game.assets.MAIN_MENU_SCENE;
+			this.BgScene = new gfx.AnimatedSprite(0, 0, 64, 64);
+			let anim = this.BgScene.Animator.AddAnimation('idle', frames.map((_, i) => i), frames.map((id) => {
+				let frame = ss.GetSprite(id);
+				frame.SourceRect.Size.Set(64, 64);
+				frame.Size.Set(64, 64);
+				return frame;
+			}));
+			anim.Loop = true;
+			anim.Duration = 2;
+			this.BgScene.Animator.Play('idle');
+			
             /**
 			 * rycerz spi przy ognisku !!!!
 			 */
@@ -31,7 +46,7 @@ namespace state {
             t1.SetSize(5);               
             t2.SetSize(5);               
             
-            this.Stage.AddChild(t1, t2);
+            this.Stage.AddChild(this.BgScene, t1, t2);
             
             // this.Stage.Alpha = 0;
             this.DimScreen(true, 2);
@@ -40,6 +55,12 @@ namespace state {
             this.ListenForKeyboard();
             this.OnResize();
         }
+		
+		Update(timeDelta: number): void
+		{
+			super.Update(timeDelta);
+			this.BgScene.Update(timeDelta);	
+		}
 
 
         OnKeyUp(key: core.key): void
