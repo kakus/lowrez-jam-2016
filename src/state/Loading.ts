@@ -45,7 +45,7 @@ namespace state {
 			])
 			
 			Promise.all([sprites, sounds] as any[]).then(() => {
-                this.Game.Play('menu');
+                this.Game.Play('splash');
 			}, (e) => {
 				timer.Stop();
 				txt.SetText("ERROR");
