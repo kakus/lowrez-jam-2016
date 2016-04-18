@@ -25,7 +25,7 @@ namespace game {
     const LEVEL_BOSS = ['Dark'];
     
     const TMP_VEC = new core.Vector();
-    const CULL_OFFSET = 24 * 4;
+    const CULL_OFFSET = 24 * 10;
     
     
     /**

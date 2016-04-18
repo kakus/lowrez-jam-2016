@@ -24,7 +24,7 @@ namespace state {
             let lastTween: core.Tween;
             
             [
-				["GAME BY", "KAKUS"],
+				["GAME BY", "KAKUS", "", "MUSIC BY", "CARLOS PAZUZU"],
 				["MADE WITH", "♥" ,"FOR", "LOWREZJAM", "2016"]
 			].forEach((screen, i) => {
 				
@@ -33,7 +33,7 @@ namespace state {
                 layer.Alpha = 0;
 				
 				screen.forEach((line, j) => {
-					let t = new gfx.AAText(0, 8 * j, line);
+					let t = new gfx.AAText(0,3 + 8 * j, line);
 					t.SetSize(5);
 					t.Anchor.Set(.5, .5);
                     if (line[0] === '♥') {

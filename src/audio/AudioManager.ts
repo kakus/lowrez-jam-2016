@@ -96,9 +96,9 @@ namespace audio {
 		{
 			return new Promise<Howl>((resolve, reject) => {
 				let howl = new Howl({
-					urls: urls,
-					onload: () => resolve(howl),
-					onloaderror: (e) => reject(e)
+					'urls': urls,
+					'onload': () => resolve(howl),
+					'onloaderror': (e) => reject(e)
 				})
 			}).then(howl => this.Sounds[name] = howl);
 		}
