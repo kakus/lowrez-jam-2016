@@ -27,7 +27,7 @@ namespace state {
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
 			
 			let frames = game.assets.MAIN_MENU_SCENE;
-			this.BgScene = new gfx.AnimatedSprite(0, 0, 64, 64);
+			this.BgScene = new gfx.AnimatedSprite(0, 7, 64, 64);
 			let anim = this.BgScene.Animator.AddAnimation('idle', frames.map((_, i) => i), frames.map((id) => {
 				let frame = ss.GetSprite(id);
 				frame.SourceRect.Size.Set(64, 64);
@@ -38,12 +38,15 @@ namespace state {
 			anim.Duration = 2;
 			this.BgScene.Animator.Play('idle');
 			
-            let t1 = new gfx.AAText(17, 45, "PRESS UP");
-            let t2 = new gfx.AAText(17, 51, "TO START");
+            let title = new gfx.AAText(5, 3, "SLUMBER KNIGHT");
+            title.SetSize(5);
+            
+            let t1 = new gfx.AAText(17, 50, "PRESS UP");
+            let t2 = new gfx.AAText(17, 56, "TO START");
             t1.SetSize(5);               
             t2.SetSize(5);               
             
-            this.Stage.AddChild(this.BgScene, t1, t2);
+            this.Stage.AddChild(this.BgScene, t1, t2, title);
             
             // this.Stage.Alpha = 0;
             this.DimScreen(true, 2);

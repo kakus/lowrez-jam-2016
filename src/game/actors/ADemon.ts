@@ -19,8 +19,6 @@ namespace game {
             idle.Loop = true;
             this.Animator.Play('idle');
             this.Sprite.Position.y -= 17;
-            
-            console.log("Spawning " + Name);
         }
     }
     

@@ -95,8 +95,7 @@ namespace game {
             upper: [d, _, d, _, a, _, a, N, N],
             lower: [b, _, b, _, _, A, _, N, N],
             gap: 15
-        },
-        
+        }
     }
     
 }

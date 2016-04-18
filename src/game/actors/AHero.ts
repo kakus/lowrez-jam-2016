@@ -66,7 +66,6 @@ namespace game {
         {
             let top = this.ToLocal(new core.Vector(GAME.Canvas.width/2, 0));
             this.Sprite.Position.Set(top.x - 12, top.y - 24);
-            console.log("hero pos " + this.Sprite.Position);
             
             this.Animator.Play('falling');
             this.Alpha = 1;

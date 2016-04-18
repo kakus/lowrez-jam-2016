@@ -389,9 +389,9 @@ namespace game {
            this.AliveDemons = this.DemonNames.filter(name => context.KilledDemons.indexOf(name) === -1);
            this.LeftItems = this.ItemNames.filter(name => context.AquiredItems.indexOf(name) === -1);
            
-           console.log(`Context Spawner:`);
-           console.log(`    Alive demons: ${this.AliveDemons}`);
-           console.log(`    Left items: ${this.LeftItems}`);
+        //    console.log(`Context Spawner:`);
+        //    console.log(`    Alive demons: ${this.AliveDemons}`);
+        //    console.log(`    Left items: ${this.LeftItems}`);
         }
         
         SpawnActor(slot: number): ADemon
