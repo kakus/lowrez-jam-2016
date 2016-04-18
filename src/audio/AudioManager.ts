@@ -1,4 +1,6 @@
 /// <reference path="../core/Features.ts" />
+/// <reference path="../declare/Howler.d.ts" />
+
 
 namespace audio {
 	
@@ -44,5 +46,70 @@ namespace audio {
 		}
 	}
 	
-	export var manager = new AudioManager();
+	class HowlerAudioManager
+	{
+		Sounds: {[id: string]: Howl} = {};
+		
+		PlayingSounds: Howl[] = [];
+		
+		GetVolume(): number
+		{
+			return Howler.volume();
+		}
+		
+		SetVolume(value: number): void
+		{
+			Howler.volume(value);
+		}
+		
+		Play(name: string, volume = 1, loop = false)
+		{
+			let sound = this.Sounds[name];
+			if (sound) {
+				sound.loop(loop);
+				sound.volume(volume);
+				sound.play();
+				if (this.PlayingSounds.indexOf(sound) === -1) {
+					this.PlayingSounds.push(sound);
+					sound.onend = () => {
+						core.TryRemoveElement(this.PlayingSounds, sound);
+					}
+				}
+			}
+			else {
+				throw new Error(`Sound with name ${name} doesn't exist in this manager.`);
+			}
+		}
+		
+		StopAll(): void
+		{
+			this.PlayingSounds.forEach(sound => sound.stop());
+			this.PlayingSounds.length = 0;
+		}
+		
+		FadeOutAll(): void
+		{
+			this.PlayingSounds.forEach(sound => sound.fade(1, 0, 0.5));
+		}
+		
+		LoadSound(name: string, urls: string[]): Promise<Howl>
+		{
+			return new Promise<Howl>((resolve, reject) => {
+				let howl = new Howl({
+					urls: urls,
+					onload: () => resolve(howl),
+					onloaderror: (e) => reject(e)
+				})
+			}).then(howl => this.Sounds[name] = howl);
+		}
+		
+		
+		LoadAll(sounds: [string, string[]][]): Promise<Howl[]>
+		{
+			return Promise.all(sounds.map(([name, url]) => this.LoadSound(name, url)));
+		}	
+	}
+	
+	// export var manager = new AudioManager();
+	export var manager = new HowlerAudioManager();
 }
