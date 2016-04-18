@@ -62,6 +62,8 @@ namespace state {
             
             // start game.
             this.RestartPurgatory();
+            // game.context.AquiredItems = ['Light'];
+            // this.BeginFigthMode('Dark');
         }
 
 
