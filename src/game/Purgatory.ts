@@ -78,7 +78,7 @@ namespace game {
             this.Size.Set(data.layer.ground[0].length, data.layer.ground.length);
             core.vector.Scale(this.Size, 24, this.Size);
             
-            this.Timer.Delay(0, () => audio.manager.Play('temple'));
+            this.Timer.Delay(0, () => audio.manager.Play('temple', 0.7, true));
         }
         
         Update(timeDelta: number): void
@@ -185,6 +185,9 @@ namespace game {
                     
                     item.Execute();
                     item.ShowInGlory();
+                    
+                    audio.manager.FadeOutAll(0.5);
+                    audio.manager.Play('item-aquired');
                     
                     this.ShowText(item.GetDescription()[0], 'white', 15)
                     this.ShowText(item.GetDescription()[1], 'white', 21)

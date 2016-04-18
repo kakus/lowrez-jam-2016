@@ -12,9 +12,6 @@ namespace game {
     const COLLAPSE_TIME = 1.0;
     const DUST_TIME = 4.0;
     
-    // audio.manager.AddSound('collapse', [3,,0.301,0.503,0.4639,0.0611,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5]); 			
-    // audio.manager.AddSound('collapse', [3,,0.301,0.59,0.63,0.12,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5], 5); 			
-    
     export class AFloatingTile extends AnimatedActor
     {
         DustPartices: core.Layer<gfx.Rectangle>;
@@ -38,7 +35,7 @@ namespace game {
             let pos = this.Sprite.Position;
             this.IsActive = false;
             
-            // audio.manager.Play('collapse', 0.5);
+            audio.manager.Play('floor-collapsing', 0.5);
             this.Animator.Play('collapse');
             
             this.Tween.New(pos)
@@ -114,10 +111,6 @@ namespace game {
                     .OnUpdate(() => {
                         dust.Position.Set(dust.Position.x | 0, dust.Position.y | 0);
                     })
-                    
-                    // .Parallel(dust.Size, t => t
-                    //     .To({x: 1, y: 1}, DUST_TIME))
-                        
                     .Parallel(dust, t => t
                         .To({Alpha: 1}, 1)
                         .Then()
@@ -134,7 +127,6 @@ namespace game {
             
             for (let i = 0; i < 40; ++i)
             {
-                // let s = sheet.GetSprite(i % 2 ? assets.DUST_CLOUD_1: assets.DUST_CLOUD_2);
                 let s = new gfx.Rectangle(0, 0, 2, 2, {fillStyle: '#c0c0c0'});
                 this.DustPartices.AddChild(s);
             };

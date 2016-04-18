@@ -34,12 +34,13 @@ namespace state {
 			
 			let sounds = audio.manager.LoadAll([
 				['fight-scene', ['assets/audio/fight-scene-music.mp3']],
-				['fireplace', ['assets/audio/fireplace.wav']],
+				['fireplace', ['assets/audio/fireplace.mp3']],
 				['monster-fight', ['assets/audio/monster-fight.wav']],
 				['demon-slayed', ['assets/audio/demon-slayed.wav']],
 				['floor-collapsing', ['assets/audio/floor-collapsing.wav']],
+				['item-aquired', ['assets/audio/item-aquired.wav']],
 				['you-died', ['assets/audio/you-died.wav']],
-				['temple', ['assets/audio/temple-music.wav']]
+				['temple', ['assets/audio/temple-music.mp3']]
 			])
 			
 			Promise.all([sprites, sounds] as any[]).then(() => {

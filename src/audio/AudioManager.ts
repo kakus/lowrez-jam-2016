@@ -87,9 +87,9 @@ namespace audio {
 			this.PlayingSounds.length = 0;
 		}
 		
-		FadeOutAll(): void
+		FadeOutAll(duration = 2): void
 		{
-			this.PlayingSounds.forEach(sound => sound.fade(1, 0, 0.5));
+			this.PlayingSounds.forEach(sound => sound.fade(1, 0, duration));
 		}
 		
 		LoadSound(name: string, urls: string[]): Promise<Howl>
