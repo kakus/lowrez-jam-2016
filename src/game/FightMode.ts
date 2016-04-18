@@ -28,6 +28,7 @@ namespace game {
         PlayerVelocity = new core.Vector(0, 0);
         // PlayerHealthBar = new HealthBar(6, 1, 20, 5, "H", new core.RgbColor(255, 0, 0, 0.5));
         CanFlap = true;
+        LockFlap = false;
         Gravity = new core.Vector(0, 80);
         
         DemonFace: ADemonFace;
@@ -133,6 +134,8 @@ namespace game {
         
         Flap(): void
         {
+            if (this.LockFlap) return;
+            
             if (this.CanFlap && this.Player.IsActive)
             {
                 this.PlayerVelocity.y = -FLIP_POWER;
@@ -153,12 +156,13 @@ namespace game {
             if (!this.Player.IsActive) return;
             
             this.DemonFace.Hurt();
+            audio.manager.Play('demon-hit');
             
             this.PlayerVelocity.y = FLIP_POWER * (upperLip ? 0.45 : -1);
             context.PlayState.ShakeScreen(0.3, 3);
             
-            let t = this.Timers.Repeat(0, () => this.CanFlap = false)
-            this.Timers.Delay(0.2, () => t.Stop());
+            this.LockFlap = true
+            this.Timers.Delay(0.25, () => this.LockFlap = false);
             
             let bloodPos = new core.Vector();
             if (upperLip) {
@@ -170,7 +174,7 @@ namespace game {
             this.EmitBloodParicles(bloodPos, upperLip);
             
             if (context.PlayerHas('Sword')) {
-                this.DemonHealthBar.Progress.Increment(-0.1);
+                this.DemonHealthBar.Progress.Increment(-0.101);
             }
             else {
                 this.DemonHealthBar.Progress.Increment(-0.05);
@@ -372,7 +376,7 @@ namespace game {
             
             this.Progress.OnChange.Add(value => {
                 value = core.math.Clamp(value, 0, 1);
-                this.Fill.Size.x = value * width;
+                this.Fill.Size.x = (value * width) | 0;
             })
         }
         

@@ -333,8 +333,11 @@ namespace game {
                         break;
                         
                         case 7:
-                            actor = new ALifeBonus(0, 0, this.SpriteSheet);
-                            this.Items.push(actor as ALifeBonus);
+                            if (!context.PlayerHas('Secret')) {
+                                actor = new ASecret(0, 0, this.SpriteSheet);
+                                this.Items.push(actor as ASecret);
+                            }
+                            else return;
                             break;
                 
                         default: console.error(`actor not mapped. (${tileId})`); return;

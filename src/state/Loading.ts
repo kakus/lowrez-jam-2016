@@ -37,6 +37,7 @@ namespace state {
 				['fireplace', ['assets/audio/fireplace.mp3']],
 				['monster-fight', ['assets/audio/monster-fight.wav']],
 				['demon-slayed', ['assets/audio/demon-slayed.wav']],
+				['demon-hit', ['assets/audio/demon-hit.wav']],
 				['floor-collapsing', ['assets/audio/floor-collapsing.wav']],
 				['item-aquired', ['assets/audio/item-aquired.wav']],
 				['you-died', ['assets/audio/you-died.wav']],

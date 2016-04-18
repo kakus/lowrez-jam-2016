@@ -38,9 +38,6 @@ namespace state {
 			anim.Duration = 2;
 			this.BgScene.Animator.Play('idle');
 			
-            /**
-			 * rycerz spi przy ognisku !!!!
-			 */
             let t1 = new gfx.AAText(17, 45, "PRESS UP");
             let t2 = new gfx.AAText(17, 51, "TO START");
             t1.SetSize(5);               
@@ -50,7 +47,7 @@ namespace state {
             
             // this.Stage.Alpha = 0;
             this.DimScreen(true, 2);
-            this.Timers.Delay(0, () => audio.manager.Play('fireplace'));
+            this.Timers.Delay(0, () => audio.manager.Play('fireplace', 1, true));
             
             this.InputController = new core.GenericInputController();
             this.ListenForKeyboard();

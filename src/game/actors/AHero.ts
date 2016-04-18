@@ -76,6 +76,7 @@ namespace game {
                 .WhenDone(() => {
                     context.PlayState.ShakeScreen(0.5);
                     this.EmitParticles();
+                    audio.manager.Play('demon-hit');
                 })
                 .Then()
                 .Delay(1.5)

@@ -100,4 +100,22 @@ namespace game {
             return ["coisy", "fire"];
         }
     }
+    
+    export class ASecret extends AItem
+    {
+        constructor(x: number, y: number, sheet: gfx.SpriteSheet)
+        {
+            super(x, y, assets.COW_BELL, sheet, 'Secret');
+        }
+        
+        Execute(): void
+        {
+            // hello darkness my old friend.
+        }
+        
+        GetDescription(): [string, string]
+        {
+            return ["there is no", "cow level"];
+        }
+    }
 }

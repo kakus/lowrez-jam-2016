@@ -16,6 +16,7 @@ namespace game {
         FLOATING_TILE_FRAMES: [1, 2, 3, 4, 5],
         
         SMALL_SHADOW : 31,
+        COW_BELL : [32],
         HEART: [35, 36],
         ATTACK_BONUS: 34,
         SWORD: [71, 72, 73, 74, 75, 76, 77, 78],
