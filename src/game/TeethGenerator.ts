@@ -47,23 +47,26 @@ namespace game {
     }
     
     const _ = undefined;
-    const a = tooth.spikeLike(15, 25);
-    const A = tooth.spikeLike(15, 35);
-    const b = tooth.spikeLike(19, 25);
-    const B = tooth.spikeLike(19, 35);
+    const a = tooth.SpikeLike(15, 25);
+    const A = tooth.SpikeLike(15, 35);
+    const i = tooth.SpikeLike(19, 25);
+    const I = tooth.SpikeLike(19, 32);
     
-    const N = tooth.spikeLike(19, 16);
-    const n = tooth.spikeLike(25, 13);
+    const N = tooth.SpikeLike(19, 16);
+    const n = tooth.SpikeLike(25, 13);
     
-    const o = tooth.circleLike(15, 16);
-    const O = tooth.circleLike(15, 38);
+    const o = tooth.CircleLike(15, 16);
+    const O = tooth.CircleLike(15, 38);
+    
+    const d = tooth.SlashLike(15, 29, 0.25,false);
+    const b = tooth.SlashLike(15, 29, 0.25);
     
     export const theeth = {
         
         // red demon
         Red: {
-            upper: [a, _, b, _, N, _],
-            lower: [_, B, _, A, N, A],
+            upper: [a, _, i, _, N, _],
+            lower: [_, I, _, A, N, A],
             gap: 30
         },
         
@@ -80,7 +83,19 @@ namespace game {
             lower: [O, _, O, o, O, _],
             gap: 20,
             color: '#ac3232'
-        }
+        },
+        
+        Purple: {
+            upper: [d, _, d, _, b, _],
+            lower: [b, _, b, _, d, _],
+            gap: 13
+        },
+        
+        Dark: {
+            upper: [d, _, d, _, a, _, a, N, N],
+            lower: [b, _, b, _, _, A, _, N, N],
+            gap: 15
+        },
         
     }
     

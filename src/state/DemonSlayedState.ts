@@ -41,6 +41,7 @@ namespace state {
             
             // this.Stage.Alpha = 0;
             this.DimScreen(true, 2);
+            this.Timers.Delay(0, () => audio.manager.Play('demon-slayed'));
             this.Timers.Delay(4, () => this.OnKeyDown(core.key.UP));
             
             

@@ -88,6 +88,8 @@ namespace game {
             });
             
             this.TimeScale = 0;
+            this.Timers.Delay(0, () => audio.manager.Play('fight-scene', 0.7, true));
+            
             context.PlayState.DimScreen(true, 2)
                 .WhenDone(() => this.TimeScale = 1);
         }
@@ -180,6 +182,8 @@ namespace game {
             // this could happen if we fall onto another tooth while falling.
             if (!this.Player.IsActive) return;
             
+            audio.manager.FadeOutAll();
+            
             this.Player.IsActive = false;
             this.TeethVelocity.Set(0, 0);
             this.Gravity.Set(0, 0);
@@ -210,6 +214,7 @@ namespace game {
             if (!this.Player.IsActive) return;
             
             context.KilledDemons.push(this.DemonName);
+            audio.manager.FadeOutAll();
             
             this.Player.IsActive = false;
             this.TeethVelocity.Set(0, 0);

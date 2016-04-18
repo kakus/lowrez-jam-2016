@@ -123,7 +123,7 @@ namespace game {
             [1, 0, 1, 0]
         ];
         
-        export function spikeLike(width: number, height = Math.floor(width/2) + 1): number[][]
+        export function SpikeLike(width: number, height = Math.floor(width/2) + 1): number[][]
         {
             core.Assert(width % 2 === 1, "only odd width");
             core.Assert(height > 0);
@@ -162,7 +162,7 @@ namespace game {
             }
         }
         
-        export function circleLike(width: number, height: number): number[][] 
+        export function CircleLike(width: number, height: number): number[][] 
         {
             core.Assert(width % 2 === 1, "only odd width");
             core.Assert(height > 0);
@@ -179,6 +179,31 @@ namespace game {
                     row[x] = (Math.sqrt(rx*rx + ry*ry) < radious) ? 1 : 0;
                 }
                 
+                tooth.push(row);
+            }
+            
+            return tooth;
+        }
+        
+        
+        export function SlashLike(width: number, height: number, steep = 1, leftSide = true): number[][]
+        {
+            core.Assert(height > 0);
+            
+            let tooth = [];
+            
+            for (let y = 0; y < height; ++y)
+            {
+                let row = [];
+                for (let x = 0; x < width; ++x)
+                {
+                    let ry = y * steep;
+                    row[x] = (x < ry) ? 1 : 0;
+                }
+                
+                if (!leftSide) {
+                    row.reverse();
+                }
                 tooth.push(row);
             }
             

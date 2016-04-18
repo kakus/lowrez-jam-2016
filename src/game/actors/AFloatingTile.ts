@@ -13,7 +13,7 @@ namespace game {
     const DUST_TIME = 4.0;
     
     // audio.manager.AddSound('collapse', [3,,0.301,0.503,0.4639,0.0611,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5]); 			
-    audio.manager.AddSound('collapse', [3,,0.301,0.59,0.63,0.12,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5], 5); 			
+    // audio.manager.AddSound('collapse', [3,,0.301,0.59,0.63,0.12,,-0.2594,,,,,,,,0.3472,0.0106,-0.0356,1,,,,,0.5], 5); 			
     
     export class AFloatingTile extends AnimatedActor
     {
@@ -38,7 +38,7 @@ namespace game {
             let pos = this.Sprite.Position;
             this.IsActive = false;
             
-            audio.manager.Play('collapse', 0.5);
+            // audio.manager.Play('collapse', 0.5);
             this.Animator.Play('collapse');
             
             this.Tween.New(pos)

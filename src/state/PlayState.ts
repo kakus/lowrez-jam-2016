@@ -118,11 +118,12 @@ namespace state {
         OnResize(): void
         {
             super.OnResize();
-            audio.manager.Volume = 0;
         }
         
         BeginFigthMode(demonName: string): void
         {
+            audio.manager.StopAll();
+            
             let gen = new game.TeethGenertor(
                 game.theeth[demonName].upper,
                 game.theeth[demonName].lower,
@@ -141,6 +142,7 @@ namespace state {
         
         RestartPurgatory(): void
         {
+            audio.manager.StopAll();
             if (this.Purgatory) this.Purgatory.RemoveFromParent();
             
             this.Stage.Alpha = 1;

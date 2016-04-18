@@ -15,7 +15,7 @@ namespace game.data {
         const o = 12; // hidden tiles
         
         export const ground: number[][] = [
-            [0, 0, 0, 0, x, 0, 0, 0, 0],
+            [0, 0, 0, 0, o, 0, 0, 0, 0],
             [0, 0, 0, 0, x, 0, 0, 0, 0],
             [0, 0, 0, 0, x, 0, 0, 0, 0],
             [_, 0, _, 0, x, 0, _, 0, _],

@@ -50,6 +50,7 @@ namespace state {
             
             // this.Stage.Alpha = 0;
             this.DimScreen(true, 2);
+            this.Timers.Delay(0, () => audio.manager.Play('fireplace'));
             
             this.InputController = new core.GenericInputController();
             this.ListenForKeyboard();
@@ -69,7 +70,7 @@ namespace state {
         
         OnKeyDown(key: core.key): void
         {
-            this.Game.Play('play');
+            this.Game.Play('intro');
         }
 
     }

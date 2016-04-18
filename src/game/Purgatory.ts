@@ -77,6 +77,8 @@ namespace game {
             this.BuildTileLayers();
             this.Size.Set(data.layer.ground[0].length, data.layer.ground.length);
             core.vector.Scale(this.Size, 24, this.Size);
+            
+            this.Timer.Delay(0, () => audio.manager.Play('temple'));
         }
         
         Update(timeDelta: number): void
@@ -163,6 +165,7 @@ namespace game {
                     // context.KilledDemons.push(demon.Name);
 
                     context.PlayState.Timers.Delay(0.7, () => {
+                        this.Timer.Delay(0, () => audio.manager.Play('monster-fight'));
 
                         context.PlayState.BlinkScreen(1);
                         context.PlayState.ShakeScreen(1).WhenDone(() => {

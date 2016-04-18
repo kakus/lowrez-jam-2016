@@ -29,7 +29,7 @@ namespace game {
         BLUE_DEMON_FRAMES: [53, 54, 55, 56],
         GREEN_DEMON_FRAMES: [57, 58, 59, 60],
         PURPLE_DEMON_FRAMES: [244, 245, 246, 247],
-        DARK_DEMON_FRAMES: [59, 60],
+        DARK_DEMON_FRAMES: [261, 261, 261, 261, 261, 261, 262, 263, 264, 265, 266, 267, 268, 269],
         
         // gui of fight scene
         // just position on 24x24 grid, size is different.
@@ -40,13 +40,25 @@ namespace game {
             // size is manually changed.
             RED: [91, 94],
             BLUE: [124, 127],
-            GREEN: [154, 157]
+            GREEN: [154, 157],
+            PURPLE: [184, 187],
+            DARK: [214, 217]
         },
     
         // Size 40x40    
         FIGHT_LIGHT_CONE: 97,
         
-        MAIN_MENU_SCENE: [121, 151, 181, 211]
+        MAIN_MENU_SCENE: [121, 151, 181, 211],
+        
+        INTRO_SCENE: [
+            281, 284,
+            311, 314,
+            341, 344,
+            371, 374,
+            401, 404,
+            431, 434,
+            461, 464
+        ]
     }
     
 }

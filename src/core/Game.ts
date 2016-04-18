@@ -80,6 +80,8 @@ namespace core {
 		
 		private CleanAfterState(): void
 		{
+			audio.manager.StopAll();
+			
 			for (let i = this.StateDOMListeners.length - 1; i >= 0; --i)
 			{
 				let l = this.StateDOMListeners[i];

@@ -6,7 +6,7 @@ namespace game {
     const JUMP_DURATION = 0.5;
     const VANISH_TIME = 2;
         
-    audio.manager.AddSound('landing', [0,,0.0785,,0.2923,0.7043,,-0.5667,0.0112,,,0.0145,,0.2016,,0.0033,,-0.0354,0.9802,,,0.0297,,0.5]);
+    // audio.manager.AddSound('landing', [0,,0.0785,,0.2923,0.7043,,-0.5667,0.0112,,,0.0145,,0.2016,,0.0033,,-0.0354,0.9802,,,0.0297,,0.5]);
     
     export class AHero extends AnimatedActor
     {
@@ -49,7 +49,7 @@ namespace game {
                     .To({y: this.Sprite.Position.y - 10}, JUMP_DURATION/2, core.easing.CubicOut)
                     .Then()
                     .To({y: this.Sprite.Position.y}, JUMP_DURATION/2))
-                .WhenDone(() => audio.manager.Play('landing'))
+                // .WhenDone(() => audio.manager.Play('landing'))
                 .Start();
         }
         

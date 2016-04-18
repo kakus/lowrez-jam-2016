@@ -62,6 +62,7 @@ namespace game {
         constructor(x: number, y: number, sheet: gfx.SpriteSheet)
         {
             super(x, y, assets.DARK_DEMON_FRAMES, sheet, "Dark");
+            this.Animator.Animations['idle'].Duration = 2;
         }
     }
 }
