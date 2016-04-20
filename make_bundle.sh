@@ -27,6 +27,7 @@ java -jar compiler.jar \
    --js_output_file $OUTDIR/app.min.js\
    $OUTDIR/app.js
 
+
 echo -- Adding promies
 cat bin/lib/promise.js > $OUTDIR/tmp
 echo -- Adding howler
@@ -41,6 +42,9 @@ echo -- Removing reference to howler from index.html
 sed -i "" /howler/d $OUTDIR/index.html
 echo -- Removing reference to promis.js from index.html
 sed -i "" /promise\.js/d $OUTDIR/index.html
+
+echo -- Removing app.js
+rm $OUTDIR/app.js
 
 echo -- Zipping
 zip -r -9 -x $OUTDIR/app.js -o $OUTDIR $OUTDIR
