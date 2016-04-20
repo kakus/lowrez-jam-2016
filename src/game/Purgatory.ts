@@ -107,6 +107,22 @@ namespace game {
         
         MovePlayer(dir: MoveDirection): void
         {
+            this.Timer.Throttle(0.18, this.DoMovePlayer, this, dir);
+        }
+        
+        private DoMovePlayer(dir: MoveDirection): void
+        {
+            if (context.PlayState.CameraTweens.TweenPlaying()) {
+                context.PlayState.CameraTweens.Update(2);
+                return;
+            }
+            
+            if (!this.Player.IsActive) {
+                // skip animations
+                this.Player.Tween.Update(1.0);
+                
+            }
+            
             if (!this.Player.IsActive || this.Player.Tween.TweenPlaying()) return;
             
             let dest = this.Player.GridPosition.Clone();
@@ -225,7 +241,8 @@ namespace game {
             
             this.ActorLayer.AddChild(text);
                         
-            return text.Tween.New(text.Position)
+            // tweens as player tween so, this text can be skipped.                        
+            return this.Player.Tween.New(text.Position)
                 .To({x: center.x}, 1, core.easing.SinusoidalInOut)
                 .Then()
                 .Delay(2)
