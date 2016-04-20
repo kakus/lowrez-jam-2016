@@ -89,7 +89,7 @@ namespace state {
             
             if (this.FightMode)
             {
-                if (this.IsKeyDown[core.key.UP]) {
+                if (this.IsKeyDown[core.key.UP] || this.IsKeyDown[core.key.W] || this.IsKeyDown[core.key.SPACE]) {
                     this.FightMode.Flap();
                 }
                 else {
@@ -102,11 +102,11 @@ namespace state {
             
             if (this.Purgatory) 
             {
-                if (this.IsKeyDown[core.key.LEFT])
+                if (this.IsKeyDown[core.key.LEFT] || this.IsKeyDown[core.key.A])
                     this.Purgatory.MovePlayer(game.MoveDirection.LEFT);
-                else if (this.IsKeyDown[core.key.UP])
+                else if (this.IsKeyDown[core.key.UP] || this.IsKeyDown[core.key.W])
                     this.Purgatory.MovePlayer(game.MoveDirection.UP);
-                else if (this.IsKeyDown[core.key.RIGHT])
+                else if (this.IsKeyDown[core.key.RIGHT] || this.IsKeyDown[core.key.D])
                     this.Purgatory.MovePlayer(game.MoveDirection.RIGHT);
                     
                 this.Purgatory.Update(timeDelta);

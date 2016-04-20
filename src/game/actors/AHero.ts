@@ -78,14 +78,12 @@ namespace game {
                     audio.manager.Play('demon-hit');
                 })
                 .Then()
-                .Delay(1.5)
+                .Delay(0.5)
                 .WhenDone(() => {
-                    this.Animator.Play('landing');
                     this.IsActive = true;
+                    this.Timer.Delay(1, () => this.Animator.Play('landing'));
+                    this.Timer.Delay(2, () => this.Animator.Play('left'));
                 })
-                .Then()
-                .Delay(1)
-                .WhenDone(() => this.Animator.Play('left'))
                 .Start();
         }
         

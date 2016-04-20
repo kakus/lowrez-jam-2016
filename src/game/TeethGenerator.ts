@@ -81,7 +81,7 @@ namespace game {
         Green: {
             upper: [_, O, _, o, _, O],
             lower: [O, _, O, o, O, _],
-            gap: 20,
+            gap: 25,
             color: '#ac3232'
         },
         
