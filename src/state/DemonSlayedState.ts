@@ -18,7 +18,7 @@ namespace state {
             
             let ss = new gfx.SpriteSheet('spritesheet', new core.Vector(24, 24));
             
-            let txt = new gfx.AAText(9, 27, "DEMON SLAYED");
+            let txt = new gfx.AAText(9, 27, "DEMON SLAIN");
             txt.SetSize(5);
             
             for (let i = 0; i < 4; ++i) {

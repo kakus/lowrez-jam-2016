@@ -25,16 +25,19 @@ java -jar compiler.jar \
    --compilation_level SIMPLE_OPTIMIZATIONS\
    --language_out ECMASCRIPT5\
    --js_output_file $OUTDIR/app.min.js\
+   bin/lib/promise.js\
+   bin/lib/howler.js\
    $OUTDIR/app.js
+   
 
 
-echo -- Adding promies
-cat bin/lib/promise.js > $OUTDIR/tmp
-echo -- Adding howler
-cat bin/lib/howler.js >> $OUTDIR/tmp
-echo -- Merging with app.min.js
-cat $OUTDIR/app.min.js >> $OUTDIR/tmp
-mv $OUTDIR/tmp $OUTDIR/app.min.js
+#echo -- Adding promies
+#cat bin/lib/promise.js > $OUTDIR/tmp
+#echo -- Adding howler
+#cat bin/lib/howler.js >> $OUTDIR/tmp
+#echo -- Merging with app.min.js
+#cat $OUTDIR/app.min.js >> $OUTDIR/tmp
+#mv $OUTDIR/tmp $OUTDIR/app.min.js
 
 echo -- Updating index.html so its load minified app
 sed -i "" s/app\.js/app.min.js/ $OUTDIR/index.html
