@@ -2,6 +2,7 @@ bin/app.js
 node_modules
 **/*.DS_STORE
 bundle/
+builds/
 bundle.zip
 .settings/
 compiler.jar
