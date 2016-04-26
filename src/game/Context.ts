@@ -1,7 +1,10 @@
 namespace game {
     
+    let PlayerSawTutorial = false;
+    
     class Context
     {
+        
         Purgatory: Purgatory;
         PlayState: state.PlayState;
         
@@ -11,6 +14,16 @@ namespace game {
         AquiredItems: string[] = [];
         // number of player lifes
         LifesLeft = 3;
+        
+        SetPlayerSawTutorial(): void
+        {
+            PlayerSawTutorial = true;
+        }
+        
+        GetPlayerSawTutorial(): boolean
+        {
+            return PlayerSawTutorial;  
+        }
         
         IsOnlyBossAlive(): boolean
         {

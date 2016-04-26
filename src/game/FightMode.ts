@@ -181,7 +181,7 @@ namespace game {
             }
         }
         
-        private PlayerTakeDamage(): void
+        protected PlayerTakeDamage(): void
         {
             // this could happen if we fall onto another tooth while falling.
             if (!this.Player.IsActive) return;

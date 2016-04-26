@@ -3,6 +3,7 @@
 /// <reference path="../game/Purgatory.ts" />
 /// <reference path="../game/Context.ts" />
 /// <reference path="../game/FightMode.ts" />
+/// <reference path="../game/FightTutorial.ts" />
 
 
 namespace state {
@@ -63,7 +64,7 @@ namespace state {
             // start game.
             this.RestartPurgatory();
             // game.context.AquiredItems = ['Light'];
-            // this.BeginFigthMode('Dark');
+            // this.BeginFigthMode('Red');
         }
 
 
@@ -133,7 +134,17 @@ namespace state {
                 game.theeth[demonName].color
             );
             
-            this.FightMode = new game.FightMode(0, 0, gen, demonName);
+            if (this.FightMode) {
+                this.FightMode.RemoveFromParent();
+            }
+            
+            if (game.context.GetPlayerSawTutorial()) {
+                this.FightMode = new game.FightMode(0, 0, gen, demonName);
+            }
+            else {
+                this.FightMode = new game.FightTutorial(0, 0, gen, demonName);
+            }
+            
             this.Stage.AddChild(this.FightMode);
             
             if (this.Purgatory) {
